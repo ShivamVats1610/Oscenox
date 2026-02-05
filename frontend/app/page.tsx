@@ -1,7 +1,9 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero/Hero";
+import ExploreRishikesh from "@/components/ExploreRishikesh";
 import Link from "next/link";
+import AboutSection from "@/components/AboutSection";
 
 export default function Home() {
   return (
@@ -11,34 +13,11 @@ export default function Home() {
 
       {/* HERO SECTION */}
       <Hero />
+      <ExploreRishikesh />
+      <AboutSection />
 
       {/* FEATURES SECTION */}
-      <section className="max-w-7xl mx-auto px-6 py-20 grid gap-10 md:grid-cols-3">
-        {[
-          {
-            title: "Smart Booking",
-            desc: "Real-time availability with instant confirmation.",
-          },
-          {
-            title: "Digital Restaurant",
-            desc: "QR-based menus and room-linked food ordering.",
-          },
-          {
-            title: "AI Assistance",
-            desc: "24/7 AI-powered guest and staff support.",
-          },
-        ].map((item, index) => (
-          <div
-            key={index}
-            className="bg-white border border-gray-200 rounded-2xl p-8 text-center shadow-sm hover:shadow-md transition"
-          >
-            <h3 className="text-xl font-semibold text-[#007877]">
-              {item.title}
-            </h3>
-            <p className="mt-3 text-sm text-gray-700">{item.desc}</p>
-          </div>
-        ))}
-      </section>
+      
 
       {/* PROPERTIES SECTION */}
       <section className="bg-gray-100 py-20">

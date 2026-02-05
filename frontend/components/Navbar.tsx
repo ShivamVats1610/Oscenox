@@ -24,7 +24,7 @@ export default function Navbar() {
           <img
             src="/images/logo.png"
             alt="Oscenox"
-            className="h-10 w-auto"
+            className="h-20 w-40 object-contain"
           />
         </Link>
 

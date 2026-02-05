@@ -1,65 +1,110 @@
-import Image from "next/image";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <>
+      <Navbar />
+
+      {/* HERO */}
+      <section className="bg-white">
+        <div className="max-w-7xl mx-auto px-6 py-24 text-center">
+          <h1 className="text-4xl md:text-6xl font-bold text-black">
+            Premium Stays.{" "}
+            <span className="text-[#007877]">Smart Hospitality.</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="mt-6 text-gray-700 max-w-2xl mx-auto">
+            Seamless bookings, intelligent services, and unforgettable stay
+            experiences — powered by Oscenox.
           </p>
+
+          <div className="mt-10 flex justify-center gap-6">
+            <Link
+              href="/booking"
+              className="bg-[#007877] text-white px-8 py-3 rounded-full font-semibold hover:opacity-90"
+            >
+              Book Your Stay
+            </Link>
+            <Link
+              href="/properties"
+              className="border border-[#007877] text-[#007877] px-8 py-3 rounded-full font-semibold hover:bg-[#007877] hover:text-white transition"
+            >
+              View Properties
+            </Link>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      </section>
+
+      {/* FEATURES */}
+      <section className="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-3 gap-10">
+        {[
+          {
+            title: "Smart Booking",
+            desc: "Real-time availability with instant confirmation.",
+          },
+          {
+            title: "Digital Restaurant",
+            desc: "QR-based menus and room-linked food ordering.",
+          },
+          {
+            title: "AI Assistance",
+            desc: "24/7 AI-powered guest and staff support.",
+          },
+        ].map((item, i) => (
+          <div
+            key={i}
+            className="bg-white border border-gray-200 rounded-2xl p-8 text-center"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <h3 className="text-xl font-semibold text-[#007877]">
+              {item.title}
+            </h3>
+            <p className="mt-3 text-gray-700 text-sm">{item.desc}</p>
+          </div>
+        ))}
+      </section>
+
+      {/* PROPERTIES */}
+      <section className="bg-gray-100 py-20">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <h2 className="text-3xl font-bold text-black">
+            Our <span className="text-[#007877]">Properties</span>
+          </h2>
+
+          <div className="mt-12 grid md:grid-cols-3 gap-8">
+            {["Little Amsterdam", "Swiss Cottage", "Coming Soon"].map(
+              (name, i) => (
+                <div
+                  key={i}
+                  className="bg-white rounded-2xl border border-gray-200 p-6"
+                >
+                  <div className="h-40 bg-gray-300 rounded-xl mb-4" />
+                  <h4 className="font-semibold text-black">{name}</h4>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Luxury stay experience by Oscenox
+                  </p>
+                </div>
+              )
+            )}
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* CTA */}
+      <section className="bg-[#007877] py-20 text-center text-white">
+        <h2 className="text-3xl font-bold">Ready to Stay with Oscenox?</h2>
+        <p className="mt-4">
+          Book your premium stay with smart hospitality.
+        </p>
+        <Link
+          href="/booking"
+          className="inline-block mt-8 bg-white text-[#007877] px-8 py-3 rounded-full font-semibold"
+        >
+          Book Now
+        </Link>
+      </section>
+
+      <Footer />
+    </>
   );
 }

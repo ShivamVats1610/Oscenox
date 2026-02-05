@@ -1,9 +1,12 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Hero from "@/components/Hero/Hero";
-import ExploreRishikesh from "@/components/ExploreRishikesh";
+import Hero from "@/components/Homepage/Hero/Hero";
+import ExploreRishikesh from "@/components/Homepage/ExploreRishikesh";
 import Link from "next/link";
-import AboutSection from "@/components/AboutSection";
+import AboutSection from "@/components/Homepage/AboutSection";
+import WhatSetsUsApart from "@/components/Homepage/WhatSetsUsApart";
+import OurGallery from "@/components/Homepage/OurGallery";
+import GetInTouch from "@/components/Homepage/GetInTouch";
 
 export default function Home() {
   return (
@@ -15,6 +18,9 @@ export default function Home() {
       <Hero />
       <ExploreRishikesh />
       <AboutSection />
+      <WhatSetsUsApart />
+      <OurGallery />
+      <GetInTouch />
 
       {/* FEATURES SECTION */}
       

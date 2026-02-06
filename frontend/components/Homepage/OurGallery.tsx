@@ -6,7 +6,7 @@ export default function OurGallery() {
   ];
 
   return (
-    <section className="relative py-32">
+    <section className="relative py-16">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center"
@@ -25,7 +25,7 @@ export default function OurGallery() {
             <h2 className="text-4xl md:text-5xl font-serif text-white">
               Our Gallery
             </h2>
-            <div className="w-24 h-[2px] bg-[#007877] mx-auto mt-6" />
+            <div className="w-24 h-0.5 bg-[#007877] mx-auto mt-6" />
           </div>
 
           {/* Gallery Grid */}
@@ -33,7 +33,7 @@ export default function OurGallery() {
             {images.map((img, index) => (
               <div
                 key={index}
-                className="relative h-[280px] rounded-3xl overflow-hidden shadow-xl group"
+                className="relative h-70 rounded-3xl overflow-hidden shadow-xl group"
               >
                 <img
                   src={img}

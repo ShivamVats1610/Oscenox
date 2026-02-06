@@ -1,6 +1,6 @@
 export default function GetInTouch() {
   return (
-    <section className="relative py-32">
+    <section className="relative py-16">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center"
@@ -21,7 +21,7 @@ export default function GetInTouch() {
             <h2 className="text-4xl md:text-5xl font-serif text-black">
               Get in Touch with Oscenox
             </h2>
-            <div className="w-24 h-[2px] bg-[#007877] mx-auto mt-6" />
+            <div className="w-24 h-0.5 bg-[#007877] mx-auto mt-6" />
             <p className="mt-6 text-black text-lg max-w-3xl mx-auto">
               Start your journey towards unmatched luxury.  
               Reach out to us for reservations, experiences, or personalized stays.
@@ -67,7 +67,7 @@ export default function GetInTouch() {
               <img
                 src="/images/contact.png"
                 alt="Contact Oscenox"
-                className="rounded-3xl shadow-xl object-cover w-full h-[420px]"
+                className="rounded-3xl shadow-xl object-cover w-full h-105"
               />
             </div>
 

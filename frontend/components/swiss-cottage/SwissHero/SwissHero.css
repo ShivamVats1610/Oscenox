@@ -1,0 +1,81 @@
+.swiss-hero {
+  position: relative;
+  height: 85vh;
+  background: url("/images/swiss-hero.jpg") center/cover no-repeat;
+  display: flex;
+  align-items: center;
+}
+
+.swiss-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.65),
+    rgba(0, 0, 0, 0.25),
+    rgba(0, 0, 0, 0.05)
+  );
+}
+/* ===== TEXT REFINEMENT (MATCH IMAGE) ===== */
+
+.swiss-hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  padding: 0 80px;
+  color: #fff;
+}
+
+/* Brand: Swiss Cottage by Oscenox */
+.swiss-brand {
+  font-family: "Georgia", "Playfair Display", serif;
+  font-size: 40px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.swiss-brand span {
+  display: block;
+  font-size: 16px;
+  font-weight: 400;
+  opacity: 0.85;
+  margin-top: 4px;
+}
+
+/* Main Title */
+.swiss-title {
+  font-family: "Georgia", "Playfair Display", serif;
+  font-size: 46px;
+  font-weight: 500;
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+
+/* Subtitle */
+.swiss-subtitle {
+  font-family: "Georgia", serif;
+  font-size: 22px;
+  font-weight: 400;
+  opacity: 0.9;
+  margin-bottom: 36px;
+}
+
+/* Button */
+.swiss-btn {
+  display: inline-block;
+  padding: 14px 36px;
+  border-radius: 999px;
+  background: #0f3d3c;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.swiss-btn:hover {
+  background: #000;
+  transform: translateY(-2px);
+}

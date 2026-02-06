@@ -1,6 +1,6 @@
+"use client";
 import Link from "next/link";
-
-export default function AboutSection() {
+export default function AboutSwissCotage() {
   return (
     <section className="relative py-16 overflow-hidden">
       {/* Background Image */}

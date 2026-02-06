@@ -11,7 +11,7 @@ export default function Hero() {
       {/* Content */}
       <div className="hero-content">
         <span className="hero-subtitle">Welcome To</span>
-        <h1 className="hero-title">Hotel Prime</h1>
+        <h1 className="hero-title">Oscenox</h1>
         <p className="hero-tagline">
           A place where comfort and luxury are blended with nature!
         </p>

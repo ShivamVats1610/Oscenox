@@ -18,7 +18,7 @@ export default function WhatSetsUsApart() {
   ];
 
   return (
-    <section className="relative py-32 bg-white">
+    <section className="relative py-16 bg-white">
       {/* Soft texture background */}
       <div
         className="absolute inset-0 bg-cover bg-center opacity-40"
@@ -32,7 +32,7 @@ export default function WhatSetsUsApart() {
           <h2 className="text-4xl md:text-5xl font-serif text-black">
             What Sets Us Apart
           </h2>
-          <div className="w-20 h-[2px] bg-[#007877] mx-auto mt-6" />
+          <div className="w-20 h-0.5 bg-[#007877] mx-auto mt-6" />
         </div>
 
         {/* Cards */}

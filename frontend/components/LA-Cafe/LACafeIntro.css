@@ -1,0 +1,154 @@
+/* SECTION */
+.la-intro {
+  position: relative;
+  padding: 200px 20px 50px 20px;
+  background: linear-gradient(135deg, #e4e3d9, #ffe2a8);
+  overflow: hidden;
+}
+
+/* CONTAINER */
+.la-intro-container {
+  max-width: 1200px;
+  margin: auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* HEADER */
+.la-intro-header {
+  text-align: center;
+  max-width: 850px;
+  margin: 0 auto 50px;
+}
+
+.la-intro-header h2 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(2.5rem, 4vw, 3.2rem);
+  margin-bottom: 20px;
+  color: #2b2b2b;
+}
+
+.la-intro-header p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #444;
+}
+
+/* GRID */
+.la-intro-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 40px;
+}
+
+/* CARD */
+.la-intro-card {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(6px);
+  border-radius: 22px;
+  padding: 18px;
+  text-align: center;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.08);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.la-intro-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.12);
+}
+
+.la-intro-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 16px;
+  margin-bottom: 18px;
+}
+
+.la-intro-card h3 {
+  font-family: "Playfair Display", serif;
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+  color: #1f1f1f;
+}
+
+.la-intro-card p {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.6;
+}
+/* LEAF PARTICLES CONTAINER */
+.leaf-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* SINGLE LEAF */
+.leaf {
+  position: absolute;
+  width: 22px;
+  height: 14px;
+  background: linear-gradient(135deg, #9c7c3b, #e5c47a);
+  border-radius: 0 100% 0 100%;
+  opacity: 0.7;
+  animation: leafFloat linear infinite;
+}
+
+/* DIFFERENT POSITIONS & SPEEDS */
+.leaf:nth-child(1) {
+  left: 10%;
+  animation-duration: 18s;
+}
+.leaf:nth-child(2) {
+  left: 25%;
+  animation-duration: 22s;
+  animation-delay: 3s;
+}
+.leaf:nth-child(3) {
+  left: 45%;
+  animation-duration: 26s;
+  animation-delay: 4s;
+}
+.leaf:nth-child(4) {
+  left: 60%;
+  animation-duration: 20s;
+  animation-delay: 2s;
+}
+.leaf:nth-child(5) {
+  left: 75%;
+  animation-duration: 24s;
+  animation-delay: 4s;
+}
+.leaf:nth-child(6) {
+  left: 85%;
+  animation-duration: 28s;
+  animation-delay: 6s;
+}
+.leaf:nth-child(7) {
+  left: 35%;
+  animation-duration: 30s;
+  animation-delay: 5s;
+}
+
+/* LEAF FLOAT ANIMATION */
+@keyframes leafFloat {
+  0% {
+    top: -10%;
+    transform: rotate(0deg) translateX(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.7;
+  }
+  50% {
+    transform: rotate(180deg) translateX(20px);
+  }
+  100% {
+    top: 110%;
+    transform: rotate(360deg) translateX(-20px);
+    opacity: 0;
+  }
+}

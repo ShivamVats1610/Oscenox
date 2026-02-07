@@ -1,0 +1,79 @@
+.la-hero {
+  position: relative;
+  min-height: 100vh;
+  padding-top: 60px;
+  padding-bottom: 260px; /* 🔥 SPACE FOR OVERLAP */
+
+  background-image: url("/images/la-hero.jpg");
+  background-size: cover;
+  background-position: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* DARK OVERLAY */
+.la-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    rgba(0, 0, 0, 0.55),
+    rgba(0, 0, 0, 0.65)
+  );
+}
+
+/* CONTENT */
+.la-hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  padding: 10px 20px 80px 20px;
+  color: #fff;
+}
+
+/* TOP TEXT */
+.la-brand {
+  font-family: "Playfair Display", serif;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  opacity: 0.9;
+  margin-bottom: 10px;
+}
+
+/* MAIN TITLE */
+.la-title {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* SUBTITLE */
+.la-subtitle {
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  opacity: 0.85;
+  margin-bottom: 35px;
+}
+
+/* BUTTON */
+.la-btn {
+  display: inline-block;
+  padding: 14px 36px;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 30px;
+  color: #fff;
+  background: transparent;
+  border: 1px solid #fff;
+  transition: all 0.3s ease;
+}
+
+.la-btn:hover {
+  background: linear-gradient(135deg, #0f3d3c, #0d2928);
+  color: #fff;
+  border-color: #fff;
+}

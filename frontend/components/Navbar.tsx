@@ -9,7 +9,7 @@ export default function Navbar() {
   const menu = [
     { name: "Home", path: "/" },
     { name: "Swiss Cottage", path: "/swiss-cottage" },
-    { name: "LA Cafe", path: "/la-cafe" },
+    { name: "LA Cafe", path: "/LA-Cafe" },
     { name: "Bunk Stay", path: "/bunk-stay" },
     { name: "Blogs", path: "/blogs" },
     { name: "About Us", path: "/about-us" },

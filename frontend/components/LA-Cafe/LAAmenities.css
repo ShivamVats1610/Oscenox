@@ -1,0 +1,105 @@
+.la-amenities {
+  padding: 60px 24px;
+  background: #0b1f1e;
+}
+
+/* BOXED CONTAINER */
+.la-amenities-box {
+  max-width: 1300px;
+  margin: auto;
+  padding: 80px 60px;
+  border-radius: 30px;
+
+  background:
+    /* linear-gradient(rgba(10, 30, 30, 0.88), rgba(10, 30, 30, 0.88)), */
+    url("/images/la-amenties.png"); /* 👈 replace here */
+
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(198, 167, 94, 0.4);
+}
+
+
+/* HEADER */
+.la-amenities-header {
+  text-align: center;
+  margin-bottom: 70px;
+}
+
+.la-amenities-header h2 {
+  font-family: "Playfair Display", serif;
+  font-size: 52px;
+  color: #e6c77b;
+  letter-spacing: 1px;
+}
+
+.la-amenities-header p {
+  max-width: 700px;
+  margin: 16px auto 0;
+  color: #d6d6d6;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* GRID */
+.la-amenities-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* ✅ 4 per row */
+  gap: 36px;
+}
+
+/* Responsive safety */
+@media (max-width: 1024px) {
+  .la-amenities-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .la-amenities-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* AMENITY CARD */
+.amenity-card {
+  padding: 30px 20px;
+  text-align: center;
+  border: 1px solid #c6a75e;
+  clip-path: polygon(
+    50% 0%,
+    100% 25%,
+    100% 75%,
+    50% 100%,
+    0% 75%,
+    0% 25%
+  );
+  background: rgba(12, 35, 35, 0.9);
+  transition: all 0.35s ease;
+}
+
+.amenity-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(198, 167, 94, 0.15);
+}
+
+/* ICON */
+.amenity-icon {
+  font-size: 28px;
+  margin-bottom: 14px;
+  color: #e6c77b;
+}
+
+/* TEXT */
+.amenity-card h4 {
+  color: #e6c77b;
+  font-size: 15px;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.amenity-card p {
+  font-size: 12px;
+  color: #cfcfcf;
+}

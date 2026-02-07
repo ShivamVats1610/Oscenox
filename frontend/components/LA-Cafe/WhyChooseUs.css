@@ -1,0 +1,106 @@
+/* SECTION */
+.why-section {
+  position: relative;
+  padding: 140px 20px;
+  overflow: hidden;
+}
+
+/* BACKGROUND */
+.why-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+/* OVERLAY */
+.why-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    rgba(0, 0, 0, 0.65),
+    rgba(0, 0, 0, 0.75)
+  );
+}
+
+/* CONTAINER */
+.why-container {
+  position: relative;
+  max-width: 1200px;
+  margin: auto;
+  text-align: center;
+  color: #fff;
+}
+
+/* HEADING */
+.why-heading {
+  font-family: "Playfair Display", serif;
+  font-size: 3rem;
+  letter-spacing: 3px;
+  margin-bottom: 90px;
+}
+
+/* GRID */
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 80px;
+  justify-items: center;
+}
+
+/* DIAMOND CARD */
+.diamond-card {
+  width: 280px;
+  height: 280px;
+  transform: rotate(45deg);
+  border: 1.5px solid #c6a75e;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  transition: all 0.4s ease;
+}
+
+.diamond-card:hover {
+  box-shadow: 0 0 40px rgba(198, 167, 94, 0.5);
+  background: rgba(198, 167, 94, 0.12);
+}
+
+/* INNER CONTENT */
+.diamond-inner {
+  transform: rotate(-45deg);
+  height: 100%;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+/* ICON */
+.diamond-icon {
+  font-size: 2.2rem;
+  margin-bottom: 14px;
+}
+
+/* TITLE */
+.diamond-inner h3 {
+  font-family: "Playfair Display", serif;
+  font-size: 1.1rem;
+  color: #c6a75e;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+/* TEXT */
+.diamond-inner p {
+  font-size: 0.8rem;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .why-grid {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+}

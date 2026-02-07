@@ -2,7 +2,7 @@
   position: relative;
   min-height: 100vh;
   padding-top: 60px;
-  padding-bottom: 260px; /* 🔥 SPACE FOR OVERLAP */
+  padding-bottom: 300px; /* 🔥 SPACE FOR OVERLAP */
 
   background-image: url("/images/la-hero.jpg");
   background-size: cover;

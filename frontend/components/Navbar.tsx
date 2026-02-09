@@ -19,11 +19,11 @@ export default function Navbar() {
 
   return (
     <>
-      {/* HEADER */}
-      <header className="sticky top-0 z-50 bg-[#f4fbfb] border-b border-gray-200">
+      {/* ================= HEADER ================= */}
+      <header className="sticky top-0 z-50 bg-[#f4fbfb] border-b border-gray-200 min-h-14">
         <div className="relative max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
 
-          {/* MOBILE HAMBURGER */}
+          {/* ========== MOBILE HAMBURGER ========== */}
           <button
             onClick={() => setOpen(true)}
             className="md:hidden text-[#007877]"
@@ -36,19 +36,19 @@ export default function Navbar() {
             </div>
           </button>
 
-          {/* LOGO (CENTER + BIGGER ON MOBILE) */}
+          {/* ========== LOGO (CENTERED ON MOBILE) ========== */}
           <Link
             href="/"
-            className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0"
+            className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex items-center"
           >
             <img
               src="/images/logo.png"
               alt="Oscenox"
-              className="h-16 sm:h-18 md:h-20 w-auto object-contain"
+              className="h-12 sm:h-14 md:h-20 w-auto object-contain"
             />
           </Link>
 
-          {/* DESKTOP MENU */}
+          {/* ========== DESKTOP MENU ========== */}
           <nav className="hidden md:flex gap-8 items-center">
             {menu.map((item) => (
               <Link
@@ -66,7 +66,7 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* DESKTOP CONTACT BUTTON */}
+          {/* ========== DESKTOP CONTACT BUTTON ========== */}
           <Link
             href="/contact"
             className="hidden md:inline-flex items-center gap-2 bg-[#007877] text-white px-6 py-2 rounded-md text-sm font-semibold hover:opacity-90 transition"
@@ -76,7 +76,7 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* MOBILE SIDEBAR BACKDROP */}
+      {/* ================= MOBILE BACKDROP ================= */}
       {open && (
         <div
           className="fixed inset-0 bg-black/40 z-40"
@@ -84,9 +84,9 @@ export default function Navbar() {
         />
       )}
 
-      {/* MOBILE SIDEBAR */}
+      {/* ================= MOBILE SIDEBAR ================= */}
       <aside
-        className={`fixed top-0 left-0 h-full w-70 bg-white z-50 transform transition-transform duration-300
+        className={`fixed top-0 left-0 h-full w-72 bg-white z-50 transform transition-transform duration-300
           ${open ? "translate-x-0" : "-translate-x-full"}`}
       >
         {/* SIDEBAR HEADER */}
@@ -94,7 +94,7 @@ export default function Navbar() {
           <img
             src="/images/logo.png"
             alt="Oscenox"
-            className="h-14 w-auto"
+            className="h-12 w-auto object-contain"
           />
           <button
             onClick={() => setOpen(false)}

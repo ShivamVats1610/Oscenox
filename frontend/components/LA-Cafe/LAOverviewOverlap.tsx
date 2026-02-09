@@ -12,11 +12,7 @@ export default function LAOverviewOverlap() {
       >
         <div
           className="max-w-6xl mx-auto rounded-3xl overflow-hidden shadow-2xl border border-[#c6a75e]"
-          style={{
-            backgroundImage: "url('/images/la-overview-bg.jpg')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
+          
         >
           <div className="bg-black/60 px-6 md:px-10 py-12 text-center text-white">
 

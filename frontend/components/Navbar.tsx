@@ -11,7 +11,7 @@ export default function Navbar() {
   const menu = [
     { name: "Home", path: "/" },
     { name: "Swiss Cottage", path: "/swiss-cottage" },
-    { name: "LA Cafe", path: "/la-cafe" },
+    { name: "LA Cafe", path: "/LA-Cafe" },
     { name: "Bunk Stay", path: "/bunk-stay" },
     { name: "Blogs", path: "/blogs" },
     { name: "About Us", path: "/about-us" },
@@ -86,7 +86,7 @@ export default function Navbar() {
 
       {/* MOBILE SIDEBAR */}
       <aside
-        className={`fixed top-0 left-0 h-full w-[280px] bg-white z-50 transform transition-transform duration-300
+        className={`fixed top-0 left-0 h-full w-70 bg-white z-50 transform transition-transform duration-300
           ${open ? "translate-x-0" : "-translate-x-full"}`}
       >
         {/* SIDEBAR HEADER */}

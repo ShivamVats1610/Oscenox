@@ -11,14 +11,12 @@
   border-radius: 30px;
 
   background:
-    /* linear-gradient(rgba(10, 30, 30, 0.88), rgba(10, 30, 30, 0.88)), */
-    url("/images/la-amenties.png"); /* 👈 replace here */
+    url("/images/la-amenties.png");
 
   background-size: cover;
   background-position: center;
   border: 1px solid rgba(198, 167, 94, 0.4);
 }
-
 
 /* HEADER */
 .la-amenities-header {
@@ -41,26 +39,67 @@
   line-height: 1.7;
 }
 
-/* GRID */
+/* GRID – DESKTOP */
 .la-amenities-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* ✅ 4 per row */
+  grid-template-columns: repeat(4, 1fr); /* ✅ desktop perfect */
   gap: 36px;
 }
 
-/* Responsive safety */
+/* TABLET */
 @media (max-width: 1024px) {
+  .la-amenities-box {
+    padding: 60px 30px;
+  }
+
   .la-amenities-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
   }
 }
 
+/* MOBILE 🔥 FIX */
 @media (max-width: 640px) {
+  .la-amenities {
+    padding: 40px 16px;
+  }
+
+  .la-amenities-box {
+    padding: 50px 18px;
+    border-radius: 24px;
+  }
+
+  .la-amenities-header h2 {
+    font-size: 36px;
+  }
+
+  .la-amenities-header p {
+    font-size: 14px;
+  }
+
+  /* ✅ 2 amenities per row on mobile */
   .la-amenities-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+
+  .amenity-card {
+    padding: 20px 14px;
+  }
+
+  .amenity-icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .amenity-card h4 {
+    font-size: 13px;
+  }
+
+  .amenity-card p {
+    font-size: 11px;
   }
 }
-
 
 /* AMENITY CARD */
 .amenity-card {

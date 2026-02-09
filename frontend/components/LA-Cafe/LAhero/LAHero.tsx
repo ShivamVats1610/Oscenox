@@ -15,7 +15,7 @@ export default function LAHero() {
 
         <p className="la-subtitle">Cafe by Oscenox</p>
 
-        <a href="#about" className="la-btn">
+        <a href="#overview" className="la-btn">
           Discover More
         </a>
       </div>

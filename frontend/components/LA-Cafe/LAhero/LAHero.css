@@ -2,7 +2,9 @@
   position: relative;
   min-height: 100vh;
   padding-top: 60px;
-  padding-bottom: 300px; /* 🔥 SPACE FOR OVERLAP */
+
+  /* DESKTOP overlap space */
+  padding-bottom: 320px;
 
   background-image: url("/images/la-hero.jpg");
   background-size: cover;
@@ -12,6 +14,22 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+}
+
+/* TABLET */
+@media (max-width: 1024px) {
+  .la-hero {
+    min-height: 95vh;
+    padding-bottom: 220px;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 640px) {
+  .la-hero {
+    min-height: 100vh;
+    padding-bottom: 120px;
+  }
 }
 
 /* DARK OVERLAY */
@@ -29,11 +47,11 @@
   position: relative;
   z-index: 2;
   max-width: 900px;
-  padding: 10px 20px 80px 20px;
+  padding: 10px 20px 80px;
   color: #fff;
 }
 
-/* TOP TEXT */
+/* TEXT */
 .la-brand {
   font-family: "Playfair Display", serif;
   font-size: 1.2rem;
@@ -42,7 +60,6 @@
   margin-bottom: 10px;
 }
 
-/* MAIN TITLE */
 .la-title {
   font-family: "Playfair Display", serif;
   font-size: clamp(3rem, 6vw, 4.5rem);
@@ -50,7 +67,6 @@
   margin-bottom: 10px;
 }
 
-/* SUBTITLE */
 .la-subtitle {
   font-size: 1.1rem;
   letter-spacing: 1px;
@@ -74,6 +90,5 @@
 
 .la-btn:hover {
   background: linear-gradient(135deg, #0f3d3c, #0d2928);
-  color: #fff;
   border-color: #fff;
 }

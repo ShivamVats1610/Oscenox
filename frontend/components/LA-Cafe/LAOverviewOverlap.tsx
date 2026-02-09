@@ -18,7 +18,7 @@ export default function LAOverviewOverlap() {
             backgroundPosition: "center",
           }}
         >
-          <div className="bg-black/30 px-6 md:px-10 py-12 text-center text-white">
+          <div className="bg-black/60 px-6 md:px-10 py-12 text-center text-white">
 
             <h2 className="text-3xl md:text-4xl font-serif text-[#c6a75e] tracking-wide">
               OVERVIEW

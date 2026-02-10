@@ -8,6 +8,15 @@ const generateToken = (id) => {
     expiresIn: "7d",
   });
 };
+exports.logout = (req, res) => {
+  res
+    .cookie("token", "", {
+      httpOnly: true,
+      expires: new Date(0),
+    })
+    .json({ success: true, message: "Logged out successfully" });
+};
+
 
 // SIGNUP CONTROLLER
 exports.signup = async (req, res) => {
@@ -37,16 +46,24 @@ exports.signup = async (req, res) => {
     });
 
     // 5. Send response
-    res.status(201).json({
-      success: true,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
-      token: generateToken(user._id),
-    });
+    res
+  .cookie("token", generateToken(user._id), {
+    httpOnly: true,
+    secure: false, // true in production (HTTPS)
+    sameSite: "strict",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  })
+  .status(201)
+  .json({
+    success: true,
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    },
+  });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
@@ -76,16 +93,23 @@ exports.login = async (req, res) => {
     }
 
     // 4. Send response
-    res.json({
-      success: true,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
-      token: generateToken(user._id),
-    });
+    res
+  .cookie("token", generateToken(user._id), {
+    httpOnly: true,
+    secure: false, // true in production
+    sameSite: "strict",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  })
+  .json({
+    success: true,
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    },
+  });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });

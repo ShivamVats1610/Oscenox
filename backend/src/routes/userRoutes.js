@@ -1,13 +1,21 @@
 const express = require("express");
 const router = express.Router();
 const protect = require("../middleware/authMiddleware");
+const allowRoles = require("../middleware/roleMiddleware");
 
-// Protected route
+// Normal protected route
 router.get("/profile", protect, (req, res) => {
   res.json({
     success: true,
-    message: "Protected route accessed",
     user: req.user,
+  });
+});
+
+// Admin-only route
+router.get("/admin", protect, allowRoles("admin"), (req, res) => {
+  res.json({
+    success: true,
+    message: "Welcome Admin",
   });
 });
 

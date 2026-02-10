@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useAuth } from "@/app/context/AuthContext";
 
 export default function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const { user, logout, loading } = useAuth();
 
   const menu = [
     { name: "Home", path: "/" },
@@ -20,7 +22,7 @@ export default function Navbar() {
   return (
     <>
       {/* ================= HEADER ================= */}
-      <header className="sticky top-0 z-50 bg-[#f4fbfb] border-b border-gray-200 min-h-14">
+      <header className="sticky top-0 z-50 bg-[#f4fbfb] border-b border-gray-200">
         <div className="relative max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
 
           {/* ========== MOBILE HAMBURGER ========== */}
@@ -49,16 +51,16 @@ export default function Navbar() {
           </Link>
 
           {/* ========== DESKTOP MENU ========== */}
-          <nav className="hidden md:flex gap-8 items-center">
+          <nav className="hidden md:flex gap-10 items-center">
             {menu.map((item) => (
               <Link
                 key={item.name}
                 href={item.path}
-                className={`text-sm font-medium pb-1 transition
+                className={`text-[15px] font-semibold tracking-wide pb-1 transition-all duration-300
                   ${
                     pathname === item.path
                       ? "text-[#007877] border-b-2 border-[#007877]"
-                      : "text-black hover:text-[#007877]"
+                      : "text-black hover:text-[#007877] hover:-translate-y-0.5"
                   }`}
               >
                 {item.name}
@@ -66,13 +68,71 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* ========== DESKTOP CONTACT BUTTON ========== */}
-          <Link
-            href="/contact"
-            className="hidden md:inline-flex items-center gap-2 bg-[#007877] text-white px-6 py-2 rounded-md text-sm font-semibold hover:opacity-90 transition"
-          >
-            📞 CONTACT US
-          </Link>
+          {/* ========== RIGHT ACTION BUTTONS (DESKTOP) ========== */}
+          {!loading && (
+            <div className="hidden md:flex items-center gap-4">
+
+              {/* CONTACT */}
+              <Link
+                href="/contact"
+                className="h-11 px-6 inline-flex items-center justify-center bg-[#007877] text-white rounded-md text-sm font-semibold hover:opacity-90 transition"
+              >
+                📞 CONTACT US
+              </Link>
+
+              {/* AUTH */}
+              {user ? (
+                <button
+                  onClick={logout}
+                  className="h-11 px-6 inline-flex items-center justify-center rounded-md
+                  text-sm font-semibold text-white
+                  bg-linear-to-r from-red-500 to-red-600
+                  hover:from-red-600 hover:to-red-700
+                  transition-all duration-300 hover:scale-[1.04]"
+                >
+                  Logout
+                </button>
+              ) : (
+                <div className="flex h-11 rounded-md overflow-hidden border border-[#007877]">
+                  <Link
+                    href="/login"
+                    className="px-5 flex items-center justify-center text-sm font-semibold
+                    text-[#007877] bg-white hover:bg-[#007877] hover:text-white transition"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    href="/signup"
+                    className="px-5 flex items-center justify-center text-sm font-semibold
+                    text-white bg-[#007877] hover:bg-[#005f5b] transition"
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ========== MOBILE AUTH BUTTONS ========== */}
+          {!loading && (
+            <div className="md:hidden flex items-center gap-3">
+              {user ? (
+                <button
+                  onClick={logout}
+                  className="text-sm font-semibold text-red-600"
+                >
+                  Logout
+                </button>
+              ) : (
+                <Link
+                  href="/login"
+                  className="text-sm font-semibold text-[#007877]"
+                >
+                  Login
+                </Link>
+              )}
+            </div>
+          )}
         </div>
       </header>
 
@@ -111,7 +171,7 @@ export default function Navbar() {
               key={item.name}
               href={item.path}
               onClick={() => setOpen(false)}
-              className={`block text-base font-medium transition
+              className={`block text-[15px] font-semibold transition
                 ${
                   pathname === item.path
                     ? "text-[#007877]"
@@ -121,6 +181,15 @@ export default function Navbar() {
               {item.name}
             </Link>
           ))}
+
+          {/* CONTACT US */}
+          <Link
+            href="/contact"
+            onClick={() => setOpen(false)}
+            className="block mt-8 bg-[#007877] text-white text-center py-3 rounded-md font-semibold"
+          >
+            📞 Contact Us
+          </Link>
         </nav>
       </aside>
     </>

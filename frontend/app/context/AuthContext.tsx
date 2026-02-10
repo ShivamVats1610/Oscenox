@@ -13,12 +13,14 @@ interface User {
   name: string;
   email: string;
   role: "user" | "admin";
+  profileImage?: string;
 }
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   logout: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -27,31 +29,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Fetch logged-in user from backend
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/users/profile", {
-          credentials: "include",
-        });
+  // 🔁 Fetch logged-in user (used on load + refresh)
+  const fetchUser = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/users/profile", {
+        credentials: "include",
+      });
 
-        if (res.ok) {
-          const data = await res.json();
-          setUser(data.user);
-        } else {
-          setUser(null);
-        }
-      } catch {
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data.user);
+      } else {
         setUser(null);
-      } finally {
-        setLoading(false);
       }
-    };
+    } catch {
+      setUser(null);
+    }
+  };
 
-    fetchUser();
+  // Initial load
+  useEffect(() => {
+    const init = async () => {
+      await fetchUser();
+      setLoading(false);
+    };
+    init();
   }, []);
 
-  // Logout
+  // 🔄 Exposed refresh (used after profile image upload, name update, etc.)
+  const refreshUser = async () => {
+    await fetchUser();
+  };
+
+  // 🚪 Logout
   const logout = async () => {
     await fetch("http://localhost:5000/api/auth/logout", {
       method: "POST",
@@ -61,7 +71,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        logout,
+        refreshUser,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

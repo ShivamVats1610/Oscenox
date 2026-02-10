@@ -4,11 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "@/app/context/AuthContext";
+import UserMenu from "@/app/components/UserMenu";
 
 export default function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const { user, logout, loading } = useAuth();
+  const { user, loading } = useAuth();
 
   const menu = [
     { name: "Home", path: "/" },
@@ -38,7 +39,7 @@ export default function Navbar() {
             </div>
           </button>
 
-          {/* ========== LOGO (CENTERED ON MOBILE) ========== */}
+          {/* ========== LOGO ========== */}
           <Link
             href="/"
             className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex items-center"
@@ -68,7 +69,7 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* ========== RIGHT ACTION BUTTONS (DESKTOP) ========== */}
+          {/* ========== RIGHT ACTIONS (DESKTOP) ========== */}
           {!loading && (
             <div className="hidden md:flex items-center gap-4">
 
@@ -82,16 +83,7 @@ export default function Navbar() {
 
               {/* AUTH */}
               {user ? (
-                <button
-                  onClick={logout}
-                  className="h-11 px-6 inline-flex items-center justify-center rounded-md
-                  text-sm font-semibold text-white
-                  bg-linear-to-r from-red-500 to-red-600
-                  hover:from-red-600 hover:to-red-700
-                  transition-all duration-300 hover:scale-[1.04]"
-                >
-                  Logout
-                </button>
+                <UserMenu />   // ✅ AVATAR + DROPDOWN
               ) : (
                 <div className="flex h-11 rounded-md overflow-hidden border border-[#007877]">
                   <Link
@@ -113,16 +105,11 @@ export default function Navbar() {
             </div>
           )}
 
-          {/* ========== MOBILE AUTH BUTTONS ========== */}
+          {/* ========== MOBILE AUTH ========== */}
           {!loading && (
             <div className="md:hidden flex items-center gap-3">
               {user ? (
-                <button
-                  onClick={logout}
-                  className="text-sm font-semibold text-red-600"
-                >
-                  Logout
-                </button>
+                <UserMenu />
               ) : (
                 <Link
                   href="/login"
@@ -182,7 +169,6 @@ export default function Navbar() {
             </Link>
           ))}
 
-          {/* CONTACT US */}
           <Link
             href="/contact"
             onClick={() => setOpen(false)}

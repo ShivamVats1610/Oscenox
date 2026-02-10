@@ -51,8 +51,8 @@ export default function AuthForm({ type }: AuthFormProps) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Authentication failed");
 
-      router.refresh();
       router.push("/");
+      router.refresh();
     } catch (err: any) {
       setError(err.message);
     } finally {

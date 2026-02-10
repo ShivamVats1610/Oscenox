@@ -19,6 +19,12 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 
+const path = require("path");
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "..", "uploads"))
+);
+
 
 app.get("/", (req, res) => {
   res.send("OSCENOX Backend API Running 🚀");

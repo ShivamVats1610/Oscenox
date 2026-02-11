@@ -71,11 +71,11 @@ export default function SwissCottageRooms() {
                   <p className="text-sm opacity-90 mb-5">{room.desc}</p>
 
                   <Link
-                    href={room.link}
+                    href="/rooms"
                     className="inline-block border border-[#c6a75e] px-6 py-2 text-xs rounded-full
                                hover:bg-[#c6a75e] hover:text-black transition"
                   >
-                    View Room
+                    Book Now
                   </Link>
                 </div>
               </div>

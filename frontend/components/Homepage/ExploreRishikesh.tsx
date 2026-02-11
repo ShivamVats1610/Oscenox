@@ -13,7 +13,7 @@ export default function ExperienceRow() {
       title: "Little Amsterdam",
       desc: "European café vibes with warm lighting and signature flavors.",
       image: "/images/little-amsterdam.jpg",
-      link: "/little-amsterdam",
+      link: "/LA-Cafe",
     },
     {
       title: "Bunk Stay",

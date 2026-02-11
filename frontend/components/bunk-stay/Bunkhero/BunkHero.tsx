@@ -18,8 +18,8 @@ export default function BunkHero() {
 
         <p className="la-subtitle">by Oscenox</p>
 
-        <a href="#overview" className="la-btn">
-          Discover More
+        <a href="/rooms" className="la-btn">
+          Book Rooms
         </a>
       </div>
     </section>

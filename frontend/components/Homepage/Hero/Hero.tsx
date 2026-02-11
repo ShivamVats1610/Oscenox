@@ -25,7 +25,6 @@ export default function Hero() {
           <select>
             <option>Select Hotel</option>
             <option>Swiss Cottage</option>
-            <option>Little Amsterdam</option>
             <option>Bunk Stay</option>
           </select>
 
@@ -37,7 +36,7 @@ export default function Hero() {
             <option>2 Adults, 2 Rooms</option>
           </select>
 
-          <button>SEARCH ROOMS</button>
+          <button><a href="/rooms">SEARCH ROOMS</a></button>
         </div>
       </div>
     </section>

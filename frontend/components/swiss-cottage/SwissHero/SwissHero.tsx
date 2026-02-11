@@ -21,8 +21,8 @@ export default function SwissHero() {
           in the Heart of the Swiss Alps
         </p>
 
-        <a href="#rooms" className="swiss-btn">
-          Discover Our Chalet
+        <a href="/rooms" className="swiss-btn">
+          Book Rooms
         </a>
       </div>
     </section>

@@ -25,7 +25,10 @@ app.use(
   express.static(path.join(__dirname, "..", "uploads"))
 );
 
+const bookingRoutes = require("./routes/bookingRoutes");
+app.use("/api/bookings", bookingRoutes);
 
+app.use("/api/rooms", require("./routes/roomRoutes"));
 app.get("/", (req, res) => {
   res.send("OSCENOX Backend API Running 🚀");
 });

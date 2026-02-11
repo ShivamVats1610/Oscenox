@@ -118,12 +118,12 @@ export default function BunkStayRooms() {
                 </p>
 
                 <Link
-                  href="/bunk-stay/rooms"
+                  href="/rooms"
                   className="inline-block text-xs px-6 py-2 rounded-full
                              border border-[#007877] text-[#007877]
                              hover:bg-[#007877] hover:text-white transition"
                 >
-                  View Details
+                  Book Now
                 </Link>
               </div>
             </div>

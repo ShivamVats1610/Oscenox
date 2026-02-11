@@ -1,7 +1,6 @@
-
+"use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -20,13 +19,22 @@ interface Room {
 
 export default function RoomsPage() {
   const [rooms, setRooms] = useState<Room[]>([]);
-  const searchParams = useSearchParams();
-  const property = searchParams.get("property");
+  const [property, setProperty] = useState<string | null>(null);
+
+  // ✅ SAFE way (no useSearchParams)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      setProperty(params.get("property"));
+    }
+  }, []);
 
   useEffect(() => {
     const fetchRooms = async () => {
       const res = await fetch(
-        `http://localhost:5000/api/rooms${property ? `?property=${property}` : ""}`
+        `http://localhost:5000/api/rooms${
+          property ? `?property=${property}` : ""
+        }`
       );
 
       const data = await res.json();
@@ -35,6 +43,7 @@ export default function RoomsPage() {
 
     fetchRooms();
   }, [property]);
+
 
   return (
      <>

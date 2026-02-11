@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useEffect, useState, use } from "react";
 import BookingPanel from "@/app/components/BookingPanel";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -20,10 +19,16 @@ interface Room {
   };
 }
 
-export default function RoomDetailsPage() {
-  const { roomId } = useParams();
+export default function RoomDetailsPage({
+  params,
+}: {
+  params: Promise<{ roomId: string }>;
+}) {
+  const { roomId } = use(params);
+
   const [room, setRoom] = useState<Room | null>(null);
   const [currentImage, setCurrentImage] = useState(0);
+
 
   useEffect(() => {
     const fetchRoom = async () => {

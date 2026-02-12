@@ -3,10 +3,10 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
-const authRoutes = require("./routes/authRoutes");
-const userRoutes = require("./routes/userRoutes");
-
 const app = express();
+const path = require("path");
+
+/* ================= MIDDLEWARE ================= */
 
 app.use(cors({
   origin: "http://localhost:3000",
@@ -16,21 +16,33 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
+/* ================= STATIC FILES ================= */
 
-const path = require("path");
 app.use(
   "/uploads",
   express.static(path.join(__dirname, "..", "uploads"))
 );
 
-const bookingRoutes = require("./routes/bookingRoutes");
-app.use("/api/bookings", bookingRoutes);
+/* ================= ROUTES ================= */
 
-app.use("/api/rooms", require("./routes/roomRoutes"));
+const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
+const bookingRoutes = require("./routes/bookingRoutes");
+const roomRoutes = require("./routes/roomRoutes");
+const invoiceRoutes = require("./routes/invoiceRoutes");
+
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/bookings", bookingRoutes);
+app.use("/api/rooms", roomRoutes);
+app.use("/api/invoice", invoiceRoutes);
+
+/* ================= HEALTH CHECK ================= */
+
 app.get("/", (req, res) => {
   res.send("OSCENOX Backend API Running 🚀");
 });
+
+/* ================= EXPORT ================= */
 
 module.exports = app;

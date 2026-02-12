@@ -30,6 +30,7 @@ export default function RoomDetailsPage({
   const [currentImage, setCurrentImage] = useState(0);
 
 
+  
   useEffect(() => {
     const fetchRoom = async () => {
       const res = await fetch(

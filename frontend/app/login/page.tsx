@@ -12,10 +12,20 @@ export default function LoginPage() {
   useEffect(() => {
     if (!loading && user) {
       router.replace("/");
+      router.refresh(); // ✅ important for app router
     }
   }, [user, loading, router]);
 
-  if (loading || user) return null;
+  // Prevent UI flash
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-gray-500">Checking session...</p>
+      </div>
+    );
+  }
+
+  if (user) return null;
 
   return <AuthForm type="login" />;
 }

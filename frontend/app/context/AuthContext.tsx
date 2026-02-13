@@ -23,50 +23,74 @@ interface AuthContextType {
   refreshUser: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
 
-  // 🔁 Fetch logged-in user (used on load + refresh)
+  /* ===========================================
+     FETCH USER
+  =========================================== */
   const fetchUser = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/users/profile", {
-        credentials: "include",
-      });
+      const res = await fetch(
+        "http://localhost:5000/api/users/profile",
+        {
+          credentials: "include",
+        }
+      );
 
-      if (res.ok) {
-        const data = await res.json();
-        setUser(data.user);
-      } else {
+      if (!res.ok) {
         setUser(null);
+        return;
       }
-    } catch {
+
+      const data = await res.json();
+      setUser(data.user);
+    } catch (error) {
+      console.error("Auth fetch error:", error);
       setUser(null);
     }
   };
 
-  // Initial load
+  /* ===========================================
+     INITIAL LOAD
+  =========================================== */
   useEffect(() => {
-    const init = async () => {
+    const initAuth = async () => {
       await fetchUser();
       setLoading(false);
     };
-    init();
+
+    initAuth();
   }, []);
 
-  // 🔄 Exposed refresh (used after profile image upload, name update, etc.)
+  /* ===========================================
+     REFRESH USER (CALL AFTER LOGIN)
+  =========================================== */
   const refreshUser = async () => {
+    setLoading(true);
     await fetchUser();
+    setLoading(false);
   };
 
-  // 🚪 Logout
+  /* ===========================================
+     LOGOUT
+  =========================================== */
   const logout = async () => {
-    await fetch("http://localhost:5000/api/auth/logout", {
-      method: "POST",
-      credentials: "include",
-    });
+    try {
+      await fetch(
+        "http://localhost:5000/api/auth/logout",
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+
     setUser(null);
   };
 
@@ -84,11 +108,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
-// Custom hook
+/* ===========================================
+   CUSTOM HOOK
+=========================================== */
 export function useAuth() {
   const context = useContext(AuthContext);
+
   if (!context) {
-    throw new Error("useAuth must be used inside AuthProvider");
+    throw new Error(
+      "useAuth must be used inside AuthProvider"
+    );
   }
+
   return context;
 }

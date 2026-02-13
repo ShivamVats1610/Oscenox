@@ -27,7 +27,7 @@ export default function AdminLayout({
       <aside className="w-72 bg-[#111111] border-r border-white/10 flex flex-col">
 
         {/* LOGO */}
-        <div className=" border-b border-white/10 flex justify-center">
+        <div className=" p-6 border-b border-white/10 flex justify-center">
           <Image
             src="/images/white.png"   // <-- put your logo inside public folder
             alt="OSCENOX Logo"
@@ -77,7 +77,7 @@ export default function AdminLayout({
         />
 
         {/* Overlay */}
-        <div className="absolute inset-0 bg-linear-to-br from-white/40 to-white/20" />
+        <div className="absolute inset-0 bg-linear-to-br bg-[#0b1f1e]" />
 
         {/* Page Content */}
         <div className="relative z-10 p-10">

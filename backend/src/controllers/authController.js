@@ -3,11 +3,19 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 // Generate JWT
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: "7d",
-  });
+const generateToken = (user) => {
+  return jwt.sign(
+    {
+      id: user._id,
+      role: user.role,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "7d" }
+  );
 };
+
+
+
 exports.logout = (req, res) => {
   res
     .cookie("token", "", {
@@ -47,7 +55,7 @@ exports.signup = async (req, res) => {
 
     // 5. Send response
     res
-  .cookie("token", generateToken(user._id), {
+ .cookie("token", generateToken(user), {
     httpOnly: true,
     secure: false, // true in production (HTTPS)
     sameSite: "strict",
@@ -94,7 +102,7 @@ exports.login = async (req, res) => {
 
     // 4. Send response
     res
-  .cookie("token", generateToken(user._id), {
+.cookie("token", generateToken(user), {
     httpOnly: true,
     secure: false, // true in production
     sameSite: "strict",

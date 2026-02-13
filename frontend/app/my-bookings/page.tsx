@@ -11,14 +11,14 @@ interface Booking {
   guests: number;
   totalAmount: number;
   status: string;
-  room: {
-    title: string;
-    images: string[];
-    property: {
-      name: string;
-      location: string;
+  room?: {
+    title?: string;
+    images?: string[];
+    property?: {
+      name?: string;
+      location?: string;
     };
-  };
+  } | null;
 }
 
 export default function MyBookings() {
@@ -28,14 +28,19 @@ export default function MyBookings() {
 
   useEffect(() => {
     const fetchBookings = async () => {
-      const res = await fetch(
-        "http://localhost:5000/api/bookings/my",
-        { credentials: "include" }
-      );
+      try {
+        const res = await fetch(
+          "http://localhost:5000/api/bookings/my",
+          { credentials: "include" }
+        );
 
-      const data = await res.json();
-      setBookings(data.bookings);
-      setLoading(false);
+        const data = await res.json();
+        setBookings(data.bookings || []);
+      } catch (err) {
+        console.error("Fetch bookings error:", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     if (user) fetchBookings();
@@ -44,29 +49,27 @@ export default function MyBookings() {
   if (!user) return null;
 
   const cancelBooking = async (id: string) => {
-  const confirmCancel = confirm("Cancel this booking?");
-  if (!confirmCancel) return;
+    const confirmCancel = confirm("Cancel this booking?");
+    if (!confirmCancel) return;
 
-  await fetch(
-    `http://localhost:5000/api/bookings/cancel/${id}`,
-    {
-      method: "PUT",
-      credentials: "include",
-    }
-  );
+    await fetch(
+      `http://localhost:5000/api/bookings/cancel/${id}`,
+      {
+        method: "PUT",
+        credentials: "include",
+      }
+    );
 
-  setBookings((prev) =>
-    prev.map((b) =>
-      b._id === id ? { ...b, status: "cancelled" } : b
-    )
-  );
-};
-
+    setBookings((prev) =>
+      prev.map((b) =>
+        b._id === id ? { ...b, status: "Cancelled" } : b
+      )
+    );
+  };
 
   return (
     <div className="relative min-h-screen text-gray-800">
-
-      {/* Background Image Overlay */}
+      {/* Background */}
       <div className="absolute inset-0 -z-10">
         <div
           className="absolute inset-0 bg-cover bg-center opacity-90"
@@ -76,7 +79,6 @@ export default function MyBookings() {
       </div>
 
       <div className="max-w-5xl mx-auto px-6 py-16">
-
         <Link
           href="/"
           className="text-[#0f766e] hover:underline font-medium"
@@ -94,98 +96,111 @@ export default function MyBookings() {
           <p className="text-gray-500">No bookings found.</p>
         ) : (
           <div className="space-y-8">
+            {bookings.map((booking) => {
+              const propertyName =
+                booking.room?.property?.name ??
+                "Property unavailable";
 
-            {bookings.map((booking) => (
-              <div
-                key={booking._id}
-                className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8 hover:shadow-2xl transition"
-              >
+              const propertyLocation =
+                booking.room?.property?.location ?? "";
 
-                {/* Header */}
-                <div className="flex justify-between items-center mb-6">
+              const roomTitle =
+                booking.room?.title ?? "Room unavailable";
 
-                  <h2 className="text-xl font-serif text-[#0f766e]">
-                    {booking.room.property.name}
-                  </h2>
+              return (
+                <div
+                  key={booking._id}
+                  className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8 hover:shadow-2xl transition"
+                >
+                  {/* Header */}
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-xl font-serif text-[#0f766e]">
+                      {propertyName}
+                    </h2>
 
-                  <span
-                    className={`px-4 py-1 rounded-full text-sm font-medium ${
-                      booking.status.toLowerCase() === "confirmed"
-                        ? "bg-green-100 text-green-700"
-                        : booking.status.toLowerCase() === "pending"
-                        ? "bg-yellow-100 text-yellow-700"
-                        : "bg-red-100 text-red-700"
-                    }`}
-                  >
-                    {booking.status}
-                  </span>
-                </div>
-
-                {/* Booking Details */}
-                <div className="grid md:grid-cols-2 gap-6 text-sm text-gray-600">
-
-                  <div>
-                    <p className="mb-2">
-                      <span className="font-semibold text-gray-800">
-                        Room:
-                      </span>{" "}
-                      {booking.room.title}
-                    </p>
-
-                    <p>
-                      <span className="font-semibold text-gray-800">
-                        Guests:
-                      </span>{" "}
-                      {booking.guests}
-                    </p>
-
-                    <p>
-                      <span className="font-semibold text-gray-800">
-                        Location:
-                      </span>{" "}
-                      {booking.room.property.location}
-                    </p>
+                    <span
+                      className={`px-4 py-1 rounded-full text-sm font-medium ${
+                        booking.status === "Confirmed"
+                          ? "bg-green-100 text-green-700"
+                          : booking.status === "Pending"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : "bg-red-100 text-red-700"
+                      }`}
+                    >
+                      {booking.status}
+                    </span>
                   </div>
 
-                  <div>
-                    <p className="mb-2">
-                      <span className="font-semibold text-gray-800">
-                        Stay:
-                      </span>{" "}
-                      {new Date(booking.checkIn).toDateString()} →{" "}
-                      {new Date(booking.checkOut).toDateString()}
-                    </p>
+                  {/* Details */}
+                  <div className="grid md:grid-cols-2 gap-6 text-sm text-gray-600">
+                    <div>
+                      <p className="mb-2">
+                        <span className="font-semibold text-gray-800">
+                          Room:
+                        </span>{" "}
+                        {roomTitle}
+                      </p>
 
-                    <p className="font-semibold text-[#0f766e] text-lg">
-                      ₹ {booking.totalAmount}
-                    </p>
+                      <p>
+                        <span className="font-semibold text-gray-800">
+                          Guests:
+                        </span>{" "}
+                        {booking.guests}
+                      </p>
 
-                    {booking.status.toLowerCase() !== "cancelled" &&
- new Date(booking.checkIn) > new Date() && (
-  <button
-    onClick={() => cancelBooking(booking._id)}
-    className="mt-4 px-5 py-2 text-sm rounded-full
-               border border-red-500 text-red-600
-               hover:bg-red-500 hover:text-white transition"
-  >
-    Cancel Booking
-  </button>
-)}
+                      <p>
+                        <span className="font-semibold text-gray-800">
+                          Location:
+                        </span>{" "}
+                        {propertyLocation}
+                      </p>
+                    </div>
 
-<a
-  href={`http://localhost:5000/api/invoice/${booking._id}`}
-  target="_blank"
-  className="inline-block mt-4 px-5 py-2 bg-[#0f766e] text-white rounded-full text-sm"
->
-Download Invoice
-</a>
+                    <div>
+                      <p className="mb-2">
+                        <span className="font-semibold text-gray-800">
+                          Stay:
+                        </span>{" "}
+                        {new Date(
+                          booking.checkIn
+                        ).toDateString()}{" "}
+                        →{" "}
+                        {new Date(
+                          booking.checkOut
+                        ).toDateString()}
+                      </p>
+
+                      <p className="font-semibold text-[#0f766e] text-lg">
+                        ₹ {booking.totalAmount}
+                      </p>
+
+                      {booking.status !== "Cancelled" &&
+                        new Date(booking.checkIn) >
+                          new Date() && (
+                          <button
+                            onClick={() =>
+                              cancelBooking(booking._id)
+                            }
+                            className="mt-4 px-5 py-2 text-sm rounded-full
+                                       border border-red-500 text-red-600
+                                       hover:bg-red-500 hover:text-white transition"
+                          >
+                            Cancel Booking
+                          </button>
+                        )}
+
+                      <a
+                        href={`http://localhost:5000/api/invoice/${booking._id}`}
+                        target="_blank"
+                        className="inline-block mt-4 px-5 py-2 bg-[#0f766e] text-white rounded-full text-sm"
+                      >
+                        Download Invoice
+                      </a>
+                    </div>
                   </div>
-
                 </div>
-
-              </div>
-            ))}
-
+              );
+            })}
           </div>
         )}
       </div>

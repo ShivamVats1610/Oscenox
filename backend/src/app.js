@@ -30,12 +30,22 @@ const userRoutes = require("./routes/userRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
 const roomRoutes = require("./routes/roomRoutes");
 const invoiceRoutes = require("./routes/invoiceRoutes");
+const propertyRoutes = require("./routes/propertyRoutes");
+
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/rooms", roomRoutes);
 app.use("/api/invoice", invoiceRoutes);
+app.use("/api/admin", require("./routes/adminRoutes"));
+app.use("/api/properties", propertyRoutes);
+app.use("/uploads", express.static("uploads"));
+app.use("/api/reports", require("./routes/reportRoutes"));
+
+
+
+
 
 /* ================= HEALTH CHECK ================= */
 

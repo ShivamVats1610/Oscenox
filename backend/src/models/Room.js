@@ -12,6 +12,10 @@ const roomSchema = new mongoose.Schema({
   capacity: Number,
   amenities: [String],
   images: [String],
+  isDeleted: {
+      type: Boolean,
+      default: false,
+    },
 }, { timestamps: true });
 
 module.exports = mongoose.model("Room", roomSchema);

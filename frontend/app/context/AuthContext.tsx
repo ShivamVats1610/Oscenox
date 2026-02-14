@@ -21,36 +21,40 @@ interface AuthContextType {
   loading: boolean;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
+  setUser: (user: User | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+
+  // 🔥 Start with false (IMPORTANT)
+  const [loading, setLoading] = useState(false);
 
   /* ===========================================
      FETCH USER
   =========================================== */
   const fetchUser = async () => {
     try {
+      setLoading(true);
+
       const res = await fetch(
         "http://localhost:5000/api/users/profile",
-        {
-          credentials: "include",
-        }
+        { credentials: "include" }
       );
 
       if (!res.ok) {
         setUser(null);
-        return;
+      } else {
+        const data = await res.json();
+        setUser(data.user);
       }
-
-      const data = await res.json();
-      setUser(data.user);
     } catch (error) {
       console.error("Auth fetch error:", error);
       setUser(null);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,21 +62,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
      INITIAL LOAD
   =========================================== */
   useEffect(() => {
-    const initAuth = async () => {
-      await fetchUser();
-      setLoading(false);
-    };
-
-    initAuth();
+    fetchUser();
   }, []);
 
   /* ===========================================
-     REFRESH USER (CALL AFTER LOGIN)
+     REFRESH USER
   =========================================== */
   const refreshUser = async () => {
-    setLoading(true);
     await fetchUser();
-    setLoading(false);
   };
 
   /* ===========================================
@@ -101,6 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         loading,
         logout,
         refreshUser,
+        setUser,
       }}
     >
       {children}
@@ -108,9 +106,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
-/* ===========================================
-   CUSTOM HOOK
-=========================================== */
 export function useAuth() {
   const context = useContext(AuthContext);
 

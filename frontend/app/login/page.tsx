@@ -12,11 +12,9 @@ export default function LoginPage() {
   useEffect(() => {
     if (!loading && user) {
       router.replace("/");
-      router.refresh(); // ✅ important for app router
     }
-  }, [user, loading, router]);
+  }, [loading, user, router]); // ✅ keep array size constant
 
-  // Prevent UI flash
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">

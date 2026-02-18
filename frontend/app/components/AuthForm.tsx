@@ -49,16 +49,17 @@ export default function AuthForm({ type }: AuthFormProps) {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/auth/${isSignup ? "signup" : "login"}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify(form),
-        }
-      );
+  `${process.env.NEXT_PUBLIC_API_URI}/api/auth/${isSignup ? "signup" : "login"}`,
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(form),
+  }
+);
+
 
       const data = await res.json();
 

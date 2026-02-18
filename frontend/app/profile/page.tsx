@@ -3,6 +3,9 @@
 import { useAuth } from "@/app/context/AuthContext";
 import Link from "next/link";
 
+// ✅ Production Base URL
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
+
 export default function ProfilePage() {
   const { user } = useAuth();
 
@@ -24,9 +27,10 @@ export default function ProfilePage() {
         <img
           src={
             user.profileImage
-              ? `http://localhost:5000${user.profileImage}`
+              ? `${BASE_URL}${user.profileImage}`
               : "/images/default-avatar.png"
           }
+          alt="Profile"
           className="w-32 h-32 mx-auto rounded-full object-cover border border-[#c6a75e]"
         />
 
@@ -36,7 +40,6 @@ export default function ProfilePage() {
           <p className="text-gray-400">{user.email}</p>
         </div>
 
-        {/* Go Settings */}
         <Link
           href="/account-settings"
           className="inline-block mt-8 px-8 py-3 bg-[#c6a75e] text-black font-semibold rounded-lg hover:bg-[#b8964d] transition"

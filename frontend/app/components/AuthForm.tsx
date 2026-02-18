@@ -20,6 +20,9 @@ interface FormState {
   password: string;
 }
 
+// ✅ Base URL from env
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
+
 export default function AuthForm({ type }: AuthFormProps) {
   const router = useRouter();
   const { setUser } = useAuth();
@@ -49,7 +52,7 @@ export default function AuthForm({ type }: AuthFormProps) {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/auth/${isSignup ? "signup" : "login"}`,
+        `${BASE_URL}/api/auth/${isSignup ? "signup" : "login"}`,
         {
           method: "POST",
           headers: {
@@ -66,10 +69,8 @@ export default function AuthForm({ type }: AuthFormProps) {
         throw new Error(data.message || "Authentication failed");
       }
 
-      // 🔥 Instantly update global auth state
       setUser(data.user);
 
-      // 🔥 Replace instead of push
       router.replace("/");
 
     } catch (err: any) {

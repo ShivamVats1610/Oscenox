@@ -21,6 +21,9 @@ interface Booking {
   } | null;
 }
 
+// ✅ Base URL from env
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
+
 export default function MyBookings() {
   const { user } = useAuth();
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -30,9 +33,13 @@ export default function MyBookings() {
     const fetchBookings = async () => {
       try {
         const res = await fetch(
-          "http://localhost:5000/api/bookings/my",
+          `${BASE_URL}/api/bookings/my`,
           { credentials: "include" }
         );
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch bookings");
+        }
 
         const data = await res.json();
         setBookings(data.bookings || []);
@@ -52,19 +59,27 @@ export default function MyBookings() {
     const confirmCancel = confirm("Cancel this booking?");
     if (!confirmCancel) return;
 
-    await fetch(
-      `http://localhost:5000/api/bookings/cancel/${id}`,
-      {
-        method: "PUT",
-        credentials: "include",
-      }
-    );
+    try {
+      const res = await fetch(
+        `${BASE_URL}/api/bookings/cancel/${id}`,
+        {
+          method: "PUT",
+          credentials: "include",
+        }
+      );
 
-    setBookings((prev) =>
-      prev.map((b) =>
-        b._id === id ? { ...b, status: "Cancelled" } : b
-      )
-    );
+      if (!res.ok) {
+        throw new Error("Cancellation failed");
+      }
+
+      setBookings((prev) =>
+        prev.map((b) =>
+          b._id === id ? { ...b, status: "Cancelled" } : b
+        )
+      );
+    } catch (err) {
+      console.error("Cancel booking error:", err);
+    }
   };
 
   return (
@@ -161,13 +176,8 @@ export default function MyBookings() {
                         <span className="font-semibold text-gray-800">
                           Stay:
                         </span>{" "}
-                        {new Date(
-                          booking.checkIn
-                        ).toDateString()}{" "}
-                        →{" "}
-                        {new Date(
-                          booking.checkOut
-                        ).toDateString()}
+                        {new Date(booking.checkIn).toDateString()} →{" "}
+                        {new Date(booking.checkOut).toDateString()}
                       </p>
 
                       <p className="font-semibold text-[#0f766e] text-lg">
@@ -190,8 +200,9 @@ export default function MyBookings() {
                         )}
 
                       <a
-                        href={`http://localhost:5000/api/invoice/${booking._id}`}
+                        href={`${BASE_URL}/api/invoice/${booking._id}`}
                         target="_blank"
+                        rel="noopener noreferrer"
                         className="inline-block mt-4 px-5 py-2 bg-[#0f766e] text-white rounded-full text-sm"
                       >
                         Download Invoice

@@ -15,6 +15,9 @@ interface Booking {
   status: string;
 }
 
+// ✅ Base URL from env
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
+
 export default function InvoicePage() {
   const { user } = useAuth();
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -24,9 +27,13 @@ export default function InvoicePage() {
     const fetchInvoices = async () => {
       try {
         const res = await fetch(
-          "http://localhost:5000/api/bookings/my",
+          `${BASE_URL}/api/bookings/my`,
           { credentials: "include" }
         );
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch invoices");
+        }
 
         const data = await res.json();
         setBookings(data.bookings || []);
@@ -72,80 +79,76 @@ export default function InvoicePage() {
 
           <div className="overflow-x-auto bg-white rounded-2xl shadow-xl border border-gray-200">
 
-  <table className="w-full text-sm">
+            <table className="w-full text-sm">
 
-    <thead className="bg-[#0f766e] text-white">
-      <tr className="text-left">
-        <th className="px-6 py-4">Invoice ID</th>
-        <th className="px-6 py-4">Property</th>
-        <th className="px-6 py-4">Room</th>
-        <th className="px-6 py-4">Stay</th>
-        <th className="px-6 py-4">Amount</th>
-        <th className="px-6 py-4">Status</th>
+              <thead className="bg-[#0f766e] text-white">
+                <tr className="text-left">
+                  <th className="px-6 py-4">Invoice ID</th>
+                  <th className="px-6 py-4">Property</th>
+                  <th className="px-6 py-4">Room</th>
+                  <th className="px-6 py-4">Stay</th>
+                  <th className="px-6 py-4">Amount</th>
+                  <th className="px-6 py-4">Status</th>
+                  <th className="px-6 py-4 text-center">
+                    Invoice
+                  </th>
+                </tr>
+              </thead>
 
-        {/* ICON HEADER */}
-        <th className="px-6 py-4 text-center">
-          Invoice
-        </th>
-      </tr>
-    </thead>
+              <tbody>
+                {bookings.map((b) => (
+                  <tr
+                    key={b._id}
+                    className="border-b hover:bg-gray-50 transition"
+                  >
+                    <td className="px-6 py-4 font-medium">
+                      INV-{b._id.slice(-6).toUpperCase()}
+                    </td>
 
-    <tbody>
-      {bookings.map((b) => (
-        <tr
-          key={b._id}
-          className="border-b hover:bg-gray-50 transition"
-        >
-          <td className="px-6 py-4 font-medium">
-            INV-{b._id.slice(-6).toUpperCase()}
-          </td>
+                    <td className="px-6 py-4">{b.property}</td>
 
-          <td className="px-6 py-4">{b.property}</td>
+                    <td className="px-6 py-4">{b.roomType}</td>
 
-          <td className="px-6 py-4">{b.roomType}</td>
+                    <td className="px-6 py-4">
+                      {new Date(b.checkIn).toDateString()} →{" "}
+                      {new Date(b.checkOut).toDateString()}
+                    </td>
 
-          <td className="px-6 py-4">
-            {new Date(b.checkIn).toDateString()} →{" "}
-            {new Date(b.checkOut).toDateString()}
-          </td>
+                    <td className="px-6 py-4 font-semibold text-[#0f766e]">
+                      ₹ {b.totalAmount}
+                    </td>
 
-          <td className="px-6 py-4 font-semibold text-[#0f766e]">
-            ₹ {b.totalAmount}
-          </td>
+                    <td className="px-6 py-4">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          b.status === "Confirmed"
+                            ? "bg-green-100 text-green-700"
+                            : b.status === "Pending"
+                            ? "bg-yellow-100 text-yellow-700"
+                            : "bg-red-100 text-red-700"
+                        }`}
+                      >
+                        {b.status}
+                      </span>
+                    </td>
 
-          <td className="px-6 py-4">
-            <span
-              className={`px-3 py-1 rounded-full text-xs font-medium ${
-                b.status === "Confirmed"
-                  ? "bg-green-100 text-green-700"
-                  : b.status === "Pending"
-                  ? "bg-yellow-100 text-yellow-700"
-                  : "bg-red-100 text-red-700"
-              }`}
-            >
-              {b.status}
-            </span>
-          </td>
+                    <td className="px-6 py-4 text-center">
+                      <a
+                        href={`${BASE_URL}/api/invoice/${b._id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block px-5 py-2 bg-[#0f766e] text-white rounded-full text-sm"
+                        title="Download Invoice"
+                      >
+                        Download
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
 
-          {/* DOWNLOAD BUTTON */}
-          <td className="px-6 py-4 text-center">
-
-            <a
-              href={`http://localhost:5000/api/invoice/${b._id}`}
-              target="_blank"
-              className="inline-block px-5 py-2 bg-[#0f766e] text-white rounded-full text-sm"
-              title="Download Invoice"
-            >
-              Download 
-            </a>
-
-          </td>
-        </tr>
-      ))}
-    </tbody>
-
-  </table>
-</div>
+            </table>
+          </div>
 
         )}
       </div>

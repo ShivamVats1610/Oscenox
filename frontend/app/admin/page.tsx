@@ -25,6 +25,9 @@ interface DashboardData {
   }[];
 }
 
+// ✅ Production Base URL
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
+
 export default function AdminDashboard() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -36,14 +39,23 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     const fetchDashboard = async () => {
-      const res = await fetch(
-        "http://localhost:5000/api/reports/admin/dashboard",
-        { credentials: "include" }
-      );
+      try {
+        const res = await fetch(
+          `${BASE_URL}/api/reports/admin/dashboard`,
+          { credentials: "include" }
+        );
 
-      const result = await res.json();
-      setData(result);
-      setLoading(false);
+        if (!res.ok) {
+          throw new Error("Failed to fetch dashboard");
+        }
+
+        const result = await res.json();
+        setData(result);
+      } catch (error) {
+        console.error("Dashboard fetch error:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchDashboard();
@@ -70,7 +82,7 @@ export default function AdminDashboard() {
         Admin Dashboard
       </h1>
 
-      {/* ================= KPI CARDS ================= */}
+      {/* KPI CARDS */}
       <div className="grid md:grid-cols-4 gap-6 mb-12">
 
         <DashboardCard
@@ -96,7 +108,7 @@ export default function AdminDashboard() {
 
       </div>
 
-      {/* ================= PROFIT SECTION ================= */}
+      {/* PROFIT + CHART */}
       <div className="grid md:grid-cols-2 gap-8 mb-12">
 
         <DashboardCard

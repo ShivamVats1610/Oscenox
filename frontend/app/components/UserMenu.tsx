@@ -4,6 +4,9 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useAuth } from "@/app/context/AuthContext";
 
+// ✅ Base URL from env
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
+
 export default function UserMenu() {
   const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);
@@ -21,8 +24,6 @@ export default function UserMenu() {
 
   if (!user) return null;
 
-  console.log("UserMenu user:", user); // 🔍 DEBUG
-
   return (
     <div ref={ref} className="relative">
       <button
@@ -32,7 +33,7 @@ export default function UserMenu() {
         <img
           src={
             user.profileImage
-              ? `http://localhost:5000${user.profileImage}`
+              ? `${BASE_URL}${user.profileImage}`
               : "/images/default-avatar.png"
           }
           alt="User"

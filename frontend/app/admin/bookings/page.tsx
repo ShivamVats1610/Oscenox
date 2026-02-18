@@ -22,6 +22,9 @@ interface Booking {
   status: "Pending" | "Confirmed" | "Cancelled";
 }
 
+// ✅ Production Base URL
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
+
 export default function AdminBookingsPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,12 +34,15 @@ export default function AdminBookingsPage() {
       setLoading(true);
 
       const res = await fetch(
-        "http://localhost:5000/api/bookings/admin/all",
+        `${BASE_URL}/api/bookings/admin/all`,
         { credentials: "include" }
       );
 
-      const data = await res.json();
+      if (!res.ok) {
+        throw new Error("Failed to fetch bookings");
+      }
 
+      const data = await res.json();
       setBookings(data || []);
     } catch (error) {
       console.error("Failed to fetch bookings:", error);
@@ -51,8 +57,8 @@ export default function AdminBookingsPage() {
 
   const updateStatus = async (id: string, status: string) => {
     try {
-      await fetch(
-        `http://localhost:5000/api/bookings/admin/${id}`,
+      const res = await fetch(
+        `${BASE_URL}/api/bookings/admin/${id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -60,6 +66,10 @@ export default function AdminBookingsPage() {
           body: JSON.stringify({ status }),
         }
       );
+
+      if (!res.ok) {
+        throw new Error("Status update failed");
+      }
 
       fetchBookings();
     } catch (error) {
@@ -74,7 +84,9 @@ export default function AdminBookingsPage() {
       </h1>
 
       {loading ? (
-        <div className="text-center text-gray-400">Loading bookings...</div>
+        <div className="text-center text-gray-400">
+          Loading bookings...
+        </div>
       ) : bookings.length === 0 ? (
         <div className="text-center text-gray-400">
           No bookings found.
@@ -99,7 +111,6 @@ export default function AdminBookingsPage() {
                   key={booking._id}
                   className="border-t border-[#c6a75e]/20 hover:bg-black/20 transition"
                 >
-                  {/* USER */}
                   <td className="p-3">
                     {booking.user?.name ?? "User Deleted"}
                     <br />
@@ -108,7 +119,6 @@ export default function AdminBookingsPage() {
                     </span>
                   </td>
 
-                  {/* ROOM */}
                   <td className="p-3">
                     {booking.room?.title ?? "Room Not Found"}
                     <br />
@@ -117,18 +127,15 @@ export default function AdminBookingsPage() {
                     </span>
                   </td>
 
-                  {/* DATES */}
                   <td className="p-3">
                     {new Date(booking.checkIn).toLocaleDateString()} –{" "}
                     {new Date(booking.checkOut).toLocaleDateString()}
                   </td>
 
-                  {/* AMOUNT */}
                   <td className="p-3 text-[#c6a75e] font-medium">
                     ₹ {booking.totalAmount}
                   </td>
 
-                  {/* STATUS */}
                   <td className="p-3">
                     <span
                       className={`px-3 py-1 rounded-full text-xs font-medium
@@ -144,7 +151,6 @@ export default function AdminBookingsPage() {
                     </span>
                   </td>
 
-                  {/* ACTIONS */}
                   <td className="p-3 space-x-2">
                     <button
                       onClick={() =>
@@ -167,6 +173,7 @@ export default function AdminBookingsPage() {
                 </tr>
               ))}
             </tbody>
+
           </table>
         </div>
       )}

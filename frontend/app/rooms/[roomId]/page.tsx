@@ -19,6 +19,9 @@ interface Room {
   };
 }
 
+// ✅ Production base URL
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
+
 export default function RoomDetailsPage({
   params,
 }: {
@@ -29,15 +32,22 @@ export default function RoomDetailsPage({
   const [room, setRoom] = useState<Room | null>(null);
   const [currentImage, setCurrentImage] = useState(0);
 
-
-  
   useEffect(() => {
     const fetchRoom = async () => {
-      const res = await fetch(
-        `http://localhost:5000/api/rooms/${roomId}`
-      );
-      const data = await res.json();
-      setRoom(data);
+      try {
+        const res = await fetch(
+          `${BASE_URL}/api/rooms/${roomId}`
+        );
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch room");
+        }
+
+        const data = await res.json();
+        setRoom(data);
+      } catch (error) {
+        console.error("Room fetch error:", error);
+      }
     };
 
     if (roomId) fetchRoom();
@@ -72,7 +82,7 @@ export default function RoomDetailsPage({
 
       <div className="relative text-gray-800">
 
-        {/* Background Overlay */}
+        {/* Background */}
         <div className="absolute inset-0 -z-10">
           <div
             className="absolute inset-0 bg-cover bg-center opacity-90"
@@ -83,31 +93,28 @@ export default function RoomDetailsPage({
 
         <div className="relative z-10">
 
-          {/* ================= HERO SECTION WITH SLIDER ================= */}
+          {/* HERO SECTION */}
           <div className="max-w-7xl mx-auto px-6 pt-16">
             <div className="relative rounded-3xl overflow-hidden shadow-2xl">
 
-              {/* Slider Wrapper */}
               <div className="relative w-full h-137.5">
 
                 {room.images.map((img, index) => (
                   <img
                     key={index}
-                    src={`http://localhost:5000${img}`}
+                    src={`${BASE_URL}${img}`}
                     className={`absolute w-full h-137.5 object-cover transition-opacity duration-700 ${
                       index === currentImage
                         ? "opacity-100"
                         : "opacity-0"
                     }`}
-                    alt=""
+                    alt={room.title}
                   />
                 ))}
 
-                {/* Gradient */}
                 <div className="absolute inset-0 bg-linear-to-r 
                                 from-black/70 via-black/40 to-transparent" />
 
-                {/* Left Content */}
                 <div className="absolute bottom-12 left-12 text-white max-w-xl">
                   <h1 className="text-4xl md:text-5xl font-serif mb-4">
                     {room.title}
@@ -127,7 +134,6 @@ export default function RoomDetailsPage({
                   </div>
                 </div>
 
-                {/* Arrows */}
                 <button
                   onClick={prevImage}
                   className="absolute left-6 top-1/2 -translate-y-1/2 
@@ -146,7 +152,6 @@ export default function RoomDetailsPage({
                   ›
                 </button>
 
-                {/* Dots */}
                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
                   {room.images.map((_, index) => (
                     <div
@@ -163,7 +168,6 @@ export default function RoomDetailsPage({
 
               </div>
 
-              {/* Booking Card */}
               <div
                 className="lg:absolute lg:top-12 lg:right-12
                            relative mt-6 lg:mt-0
@@ -176,24 +180,7 @@ export default function RoomDetailsPage({
             </div>
           </div>
 
-          {/* ================= NAVIGATION TABS ================= */}
-          <div className="border-t border-gray-200 mt-12">
-            <div className="max-w-7xl mx-auto px-6 py-6 flex gap-8 text-sm font-semibold text-gray-600 overflow-x-auto">
-              <a href="#overview" className="hover:text-[#0f766e] transition">
-                OVERVIEW
-              </a>
-              <a href="#amenities" className="hover:text-[#0f766e] transition">
-                AMENITIES
-              </a>
-              <a href="#la-cafe" className="hover:text-[#0f766e] transition">
-                LA-CAFE
-              </a>
-              <span>REVIEWS</span>
-              <span>POLICIES</span>
-            </div>
-          </div>
-
-          {/* ================= OVERVIEW ================= */}
+          {/* OVERVIEW */}
           <div id="overview" className="max-w-7xl mx-auto px-6 py-16">
             <h2 className="text-3xl font-serif text-[#0f766e] mb-6">
               Overview
@@ -203,7 +190,7 @@ export default function RoomDetailsPage({
             </p>
           </div>
 
-          {/* ================= AMENITIES ================= */}
+          {/* AMENITIES */}
           <div id="amenities" className="bg-gray-50 py-16">
             <div className="max-w-7xl mx-auto px-6">
               <h2 className="text-3xl font-serif text-[#0f766e] mb-10">
@@ -222,42 +209,6 @@ export default function RoomDetailsPage({
                     </div>
                   </div>
                 ))}
-              </div>
-            </div>
-          </div>
-
-          {/* ================= LA-CAFE ================= */}
-          <div id="la-cafe" className="max-w-7xl mx-auto px-6 py-20">
-            <h2 className="text-3xl font-serif text-[#0f766e] mb-8">
-              Discover LA-Cafe
-            </h2>
-
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div className="rounded-3xl overflow-hidden shadow-xl">
-                <img
-                  src="/images/la-cafe.jpg"
-                  className="w-full h-87.5 object-cover"
-                  alt="LA Cafe"
-                />
-              </div>
-
-              <div>
-                <h3 className="text-2xl font-serif text-[#0f766e] mb-4">
-                  Fine Dining & Premium Ambience
-                </h3>
-
-                <p className="text-gray-600 mb-6 leading-relaxed">
-                  Indulge in curated dishes, handcrafted beverages, and a
-                  sophisticated ambiance designed to complement your stay.
-                </p>
-
-                <a
-                  href="/la-cafe"
-                  className="inline-block bg-[#0f766e] text-white px-6 py-3 rounded-full
-                             hover:bg-[#0d5c56] transition"
-                >
-                  Explore LA-Cafe
-                </a>
               </div>
             </div>
           </div>

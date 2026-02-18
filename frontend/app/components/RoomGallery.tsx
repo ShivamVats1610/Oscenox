@@ -6,8 +6,8 @@ interface Props {
   images: string[];
 }
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+// ✅ Production-safe (no localhost fallback)
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
 
 export default function RoomGallery({ images }: Props) {
   const [active, setActive] = useState(0);
@@ -16,9 +16,7 @@ export default function RoomGallery({ images }: Props) {
 
   if (!images || images.length === 0) return null;
 
-  /* ===========================================
-     AUTO SLIDE
-  =========================================== */
+  /* AUTO SLIDE */
   useEffect(() => {
     if (hovering || fullscreen) return;
 
@@ -29,9 +27,7 @@ export default function RoomGallery({ images }: Props) {
     return () => clearInterval(interval);
   }, [images.length, hovering, fullscreen]);
 
-  /* ===========================================
-     ESC CLOSE FULLSCREEN
-  =========================================== */
+  /* ESC CLOSE FULLSCREEN */
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") setFullscreen(false);
@@ -54,7 +50,7 @@ export default function RoomGallery({ images }: Props) {
 
   return (
     <>
-      {/* ================= NORMAL GALLERY ================= */}
+      {/* NORMAL GALLERY */}
       <div
         className="space-y-4"
         onMouseEnter={() => setHovering(true)}
@@ -70,7 +66,6 @@ export default function RoomGallery({ images }: Props) {
             className="w-full h-112.5 object-cover transition duration-700"
           />
 
-          {/* LEFT ARROW */}
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -84,7 +79,6 @@ export default function RoomGallery({ images }: Props) {
             ‹
           </button>
 
-          {/* RIGHT ARROW */}
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -99,7 +93,6 @@ export default function RoomGallery({ images }: Props) {
           </button>
         </div>
 
-        {/* THUMBNAILS */}
         <div className="flex gap-4 overflow-x-auto pb-2">
           {images.map((img, index) => (
             <img
@@ -118,11 +111,10 @@ export default function RoomGallery({ images }: Props) {
         </div>
       </div>
 
-      {/* ================= FULLSCREEN MODAL ================= */}
+      {/* FULLSCREEN */}
       {fullscreen && (
         <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center">
 
-          {/* CLOSE BUTTON */}
           <button
             onClick={() => setFullscreen(false)}
             className="absolute top-6 right-8 text-white text-3xl"
@@ -131,14 +123,12 @@ export default function RoomGallery({ images }: Props) {
           </button>
 
           <div className="relative max-w-6xl w-full px-8">
-
             <img
               src={`${BASE_URL}${images[active] ?? images[0]}`}
               alt="Fullscreen Room"
               className="w-full max-h-[80vh] object-contain rounded-xl"
             />
 
-            {/* LEFT ARROW */}
             <button
               onClick={prevSlide}
               className="absolute left-0 top-1/2 -translate-y-1/2
@@ -147,7 +137,6 @@ export default function RoomGallery({ images }: Props) {
               ‹
             </button>
 
-            {/* RIGHT ARROW */}
             <button
               onClick={nextSlide}
               className="absolute right-0 top-1/2 -translate-y-1/2
@@ -157,7 +146,6 @@ export default function RoomGallery({ images }: Props) {
             </button>
           </div>
 
-          {/* BOTTOM THUMBNAILS */}
           <div className="absolute bottom-6 flex gap-4 overflow-x-auto px-8">
             {images.map((img, index) => (
               <img

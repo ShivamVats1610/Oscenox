@@ -15,6 +15,9 @@ interface Room {
   } | null;
 }
 
+// ✅ Production Base URL
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
+
 export default function AdminRoomsPage() {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(true);
@@ -25,11 +28,15 @@ export default function AdminRoomsPage() {
       setLoading(true);
 
       const res = await fetch(
-        `http://localhost:5000/api/rooms/admin/all${
+        `${BASE_URL}/api/rooms/admin/all${
           showArchived ? "?archived=true" : ""
         }`,
         { credentials: "include" }
       );
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch rooms");
+      }
 
       const data = await res.json();
       setRooms(data || []);
@@ -48,28 +55,44 @@ export default function AdminRoomsPage() {
   const archiveRoom = async (id: string) => {
     if (!confirm("Archive this room?")) return;
 
-    await fetch(
-      `http://localhost:5000/api/rooms/admin/${id}`,
-      {
-        method: "DELETE",
-        credentials: "include",
-      }
-    );
+    try {
+      const res = await fetch(
+        `${BASE_URL}/api/rooms/admin/${id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
 
-    fetchRooms();
+      if (!res.ok) {
+        throw new Error("Archive failed");
+      }
+
+      fetchRooms();
+    } catch (error) {
+      console.error("Archive failed:", error);
+    }
   };
 
   /* RESTORE ROOM */
   const restoreRoom = async (id: string) => {
-    await fetch(
-      `http://localhost:5000/api/rooms/admin/restore/${id}`,
-      {
-        method: "PUT",
-        credentials: "include",
-      }
-    );
+    try {
+      const res = await fetch(
+        `${BASE_URL}/api/rooms/admin/restore/${id}`,
+        {
+          method: "PUT",
+          credentials: "include",
+        }
+      );
 
-    fetchRooms();
+      if (!res.ok) {
+        throw new Error("Restore failed");
+      }
+
+      fetchRooms();
+    } catch (error) {
+      console.error("Restore failed:", error);
+    }
   };
 
   return (
@@ -189,6 +212,7 @@ export default function AdminRoomsPage() {
                 </tr>
               ))}
             </tbody>
+
           </table>
         </div>
       )}

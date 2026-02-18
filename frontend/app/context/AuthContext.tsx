@@ -26,10 +26,11 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
+// ✅ Base URL from env
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-
-  // 🔥 Start with false (IMPORTANT)
   const [loading, setLoading] = useState(false);
 
   /* ===========================================
@@ -40,7 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(true);
 
       const res = await fetch(
-        "http://localhost:5000/api/users/profile",
+        `${BASE_URL}/api/users/profile`,
         { credentials: "include" }
       );
 
@@ -78,7 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = async () => {
     try {
       await fetch(
-        "http://localhost:5000/api/auth/logout",
+        `${BASE_URL}/api/auth/logout`,
         {
           method: "POST",
           credentials: "include",
@@ -110,9 +111,7 @@ export function useAuth() {
   const context = useContext(AuthContext);
 
   if (!context) {
-    throw new Error(
-      "useAuth must be used inside AuthProvider"
-    );
+    throw new Error("useAuth must be used inside AuthProvider");
   }
 
   return context;

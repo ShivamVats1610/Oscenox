@@ -4,6 +4,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
 
+// ✅ Base URL from env
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
+
 export default function BookingPanel({ room }: any) {
   const { user } = useAuth();
   const router = useRouter();
@@ -15,6 +18,7 @@ export default function BookingPanel({ room }: any) {
   const [guests, setGuests] = useState(1);
   const [total, setTotal] = useState(0);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (checkIn && checkOut) {
@@ -26,7 +30,7 @@ export default function BookingPanel({ room }: any) {
       if (diff > 0) setTotal(diff * room.pricePerNight);
       else setTotal(0);
     }
-  }, [checkIn, checkOut]);
+  }, [checkIn, checkOut, room.pricePerNight]);
 
   const handleBooking = async () => {
     setError("");
@@ -36,28 +40,44 @@ export default function BookingPanel({ room }: any) {
       return;
     }
 
-    if (!checkIn || !checkOut)
+    if (!checkIn || !checkOut) {
       return setError("Select dates first");
+    }
 
-    const res = await fetch(
-      "http://localhost:5000/api/bookings",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          room: room._id,
-          checkIn,
-          checkOut,
-          guests,
-          totalAmount: total,
-        }),
+    if (total <= 0) {
+      return setError("Invalid stay duration");
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await fetch(
+        `${BASE_URL}/api/bookings`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            room: room._id,
+            checkIn,
+            checkOut,
+            guests,
+            totalAmount: total,
+          }),
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Booking failed");
       }
-    );
 
-    if (!res.ok) return setError("Booking failed");
+      router.push("/my-bookings");
 
-    router.push("/my-bookings");
+    } catch (err: any) {
+      setError(err.message || "Booking failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -102,9 +122,10 @@ export default function BookingPanel({ room }: any) {
 
       <button
         onClick={handleBooking}
+        disabled={loading}
         className="w-full py-3 bg-[#c6a75e] text-black rounded-lg font-semibold hover:bg-[#b8964d] transition"
       >
-        Reserve Now
+        {loading ? "Processing..." : "Reserve Now"}
       </button>
     </div>
   );

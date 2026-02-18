@@ -4,6 +4,9 @@ import { useAuth } from "@/app/context/AuthContext";
 import { useState } from "react";
 import Link from "next/link";
 
+// ✅ Production Base URL
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
+
 export default function AccountSettingsPage() {
   const { user, refreshUser } = useAuth();
 
@@ -25,67 +28,94 @@ export default function AccountSettingsPage() {
     const formData = new FormData();
     formData.append("profileImage", image);
 
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    await fetch("http://localhost:5000/api/users/profile/image", {
-      method: "PUT",
-      credentials: "include",
-      body: formData,
-    });
+      const res = await fetch(
+        `${BASE_URL}/api/users/profile/image`,
+        {
+          method: "PUT",
+          credentials: "include",
+          body: formData,
+        }
+      );
 
-    await refreshUser();
-    setImage(null);
-    setLoading(false);
+      if (!res.ok) {
+        throw new Error("Image upload failed");
+      }
+
+      await refreshUser();
+      setImage(null);
+      setMessage("Profile image updated ✅");
+    } catch (error) {
+      setMessage("Image upload failed ❌");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   /* ================= PROFILE UPDATE ================= */
   const handleProfileUpdate = async () => {
-    setLoading(true);
-    setMessage("");
+    try {
+      setLoading(true);
+      setMessage("");
 
-    const res = await fetch("http://localhost:5000/api/users/profile", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ name, email }),
-    });
+      const res = await fetch(
+        `${BASE_URL}/api/users/profile`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ name, email }),
+        }
+      );
 
-    if (res.ok) {
-      await refreshUser();
-      setMessage("Profile updated successfully ✅");
-    } else {
-      setMessage("Failed to update profile ❌");
+      if (res.ok) {
+        await refreshUser();
+        setMessage("Profile updated successfully ✅");
+      } else {
+        setMessage("Failed to update profile ❌");
+      }
+    } catch (error) {
+      setMessage("Profile update failed ❌");
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   /* ================= PASSWORD CHANGE ================= */
   const handlePasswordChange = async () => {
-    setLoading(true);
-    setMessage("");
+    try {
+      setLoading(true);
+      setMessage("");
 
-    const res = await fetch(
-      "http://localhost:5000/api/users/profile/password",
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ currentPassword, newPassword }),
+      const res = await fetch(
+        `${BASE_URL}/api/users/profile/password`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ currentPassword, newPassword }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setMessage(data.message || "Password updated ✅");
+        setCurrentPassword("");
+        setNewPassword("");
+      } else {
+        setMessage(data.message || "Password update failed ❌");
       }
-    );
-
-    const data = await res.json();
-
-    if (res.ok) {
-      setMessage(data.message);
-      setCurrentPassword("");
-      setNewPassword("");
-    } else {
-      setMessage(data.message || "Password update failed ❌");
+    } catch (error) {
+      setMessage("Password update failed ❌");
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -101,7 +131,9 @@ export default function AccountSettingsPage() {
         </h1>
 
         {message && (
-          <p className="text-center text-sm mb-4 text-green-400">{message}</p>
+          <p className="text-center text-sm mb-4 text-green-400">
+            {message}
+          </p>
         )}
 
         {/* ================= IMAGE ================= */}
@@ -110,9 +142,10 @@ export default function AccountSettingsPage() {
           <img
             src={
               user.profileImage
-                ? `http://localhost:5000${user.profileImage}`
+                ? `${BASE_URL}${user.profileImage}`
                 : "/images/default-avatar.png"
             }
+            alt="Profile"
             className="w-28 h-28 rounded-full object-cover border border-[#c6a75e]"
           />
 
@@ -120,7 +153,9 @@ export default function AccountSettingsPage() {
             type="file"
             id="profileImage"
             accept="image/*"
-            onChange={(e) => setImage(e.target.files?.[0] || null)}
+            onChange={(e) =>
+              setImage(e.target.files?.[0] || null)
+            }
             className="hidden"
           />
 
@@ -146,7 +181,9 @@ export default function AccountSettingsPage() {
 
         {/* ================= INFO ================= */}
         <div className="space-y-4 mb-8">
-          <h2 className="text-lg font-semibold">Personal Information</h2>
+          <h2 className="text-lg font-semibold">
+            Personal Information
+          </h2>
 
           <input
             value={name}
@@ -171,13 +208,17 @@ export default function AccountSettingsPage() {
 
         {/* ================= PASSWORD ================= */}
         <div className="space-y-4">
-          <h2 className="text-lg font-semibold">Change Password</h2>
+          <h2 className="text-lg font-semibold">
+            Change Password
+          </h2>
 
           <input
             type="password"
             placeholder="Current Password"
             value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
+            onChange={(e) =>
+              setCurrentPassword(e.target.value)
+            }
             className="w-full px-4 py-3 bg-black/40 border border-[#c6a75e]/30 rounded-lg text-white"
           />
 
@@ -185,7 +226,9 @@ export default function AccountSettingsPage() {
             type="password"
             placeholder="New Password"
             value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
+            onChange={(e) =>
+              setNewPassword(e.target.value)
+            }
             className="w-full px-4 py-3 bg-black/40 border border-[#c6a75e]/30 rounded-lg text-white"
           />
 

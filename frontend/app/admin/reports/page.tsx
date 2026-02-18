@@ -38,6 +38,9 @@ interface DashboardData {
   }[];
 }
 
+// ✅ Production Base URL
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
+
 export default function AdminReportsPage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -49,14 +52,23 @@ export default function AdminReportsPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(
-        "http://localhost:5000/api/reports/admin/dashboard",
-        { credentials: "include" }
-      );
+      try {
+        const res = await fetch(
+          `${BASE_URL}/api/reports/admin/dashboard`,
+          { credentials: "include" }
+        );
 
-      const result = await res.json();
-      setData(result);
-      setLoading(false);
+        if (!res.ok) {
+          throw new Error("Failed to fetch dashboard data");
+        }
+
+        const result = await res.json();
+        setData(result);
+      } catch (error) {
+        console.error("Dashboard fetch error:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchData();
@@ -85,28 +97,21 @@ export default function AdminReportsPage() {
         Financial Analytics
       </h1>
 
-      {/* ================= KPI CARDS ================= */}
       <div className="grid md:grid-cols-4 gap-6 mb-12">
-
         <Card title="Gross Revenue" value={`₹ ${data.grossRevenue}`} />
         <Card title="Net Revenue" value={`₹ ${data.netRevenue}`} />
         <Card title="Profit" value={`₹ ${data.profit}`} highlight />
         <Card title="Tax Collected" value={`₹ ${data.taxCollected}`} />
-
       </div>
 
       <div className="grid md:grid-cols-3 gap-6 mb-12">
-
         <Card title="Platform Fee" value={`₹ ${data.platformFee}`} />
         <Card title="Refund Loss" value={`₹ ${data.refundLoss}`} />
         <Card title="Active Rooms" value={data.activeRooms} />
-
       </div>
 
-      {/* ================= CHARTS ================= */}
       <div className="grid md:grid-cols-2 gap-10">
 
-        {/* Monthly Revenue Chart */}
         <div className="bg-black/40 p-6 rounded-2xl border border-[#c6a75e]/20">
           <h2 className="text-xl font-serif text-[#c6a75e] mb-6">
             Monthly Revenue
@@ -127,7 +132,6 @@ export default function AdminReportsPage() {
           </ResponsiveContainer>
         </div>
 
-        {/* Booking Status Pie */}
         <div className="bg-black/40 p-6 rounded-2xl border border-[#c6a75e]/20">
           <h2 className="text-xl font-serif text-[#c6a75e] mb-6">
             Booking Status Distribution
@@ -159,8 +163,6 @@ export default function AdminReportsPage() {
     </div>
   );
 }
-
-/* ================= CARD COMPONENT ================= */
 
 function Card({
   title,

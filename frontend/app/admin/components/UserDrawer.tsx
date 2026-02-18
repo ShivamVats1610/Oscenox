@@ -37,13 +37,13 @@ interface UserDetails {
   bookings: Booking[];
 }
 
+// ✅ Production Base URL
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
+
 export default function UserDrawer({ userId, onClose }: Props) {
   const [data, setData] = useState<UserDetails | null>(null);
   const [loading, setLoading] = useState(false);
 
-  /* ===========================================
-     FETCH USER DETAILS
-  =========================================== */
   useEffect(() => {
     if (!userId) return;
 
@@ -52,9 +52,13 @@ export default function UserDrawer({ userId, onClose }: Props) {
         setLoading(true);
 
         const res = await fetch(
-          `http://localhost:5000/api/users/admin/${userId}/details`,
+          `${BASE_URL}/api/users/admin/${userId}/details`,
           { credentials: "include" }
         );
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch user details");
+        }
 
         const result = await res.json();
         setData(result);
@@ -73,20 +77,17 @@ export default function UserDrawer({ userId, onClose }: Props) {
   return (
     <div className="fixed inset-0 z-50 flex">
 
-      {/* Overlay */}
       <div
         onClick={onClose}
         className="flex-1 bg-black/60 backdrop-blur-sm"
       />
 
-      {/* Drawer */}
       <div className="w-130 bg-[#0b1f1e] text-white p-8 overflow-y-auto shadow-2xl border-l border-[#c6a75e]/30">
 
         {loading || !data ? (
           <p className="text-gray-400">Loading...</p>
         ) : (
           <>
-            {/* ================= HEADER ================= */}
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-serif text-[#c6a75e]">
                 {data.user?.name ?? "User"}
@@ -100,9 +101,7 @@ export default function UserDrawer({ userId, onClose }: Props) {
               </button>
             </div>
 
-            {/* ================= BASIC INFO ================= */}
             <div className="space-y-2 text-sm mb-6">
-
               <p>
                 <span className="text-gray-400">Email:</span>{" "}
                 {data.user?.email}
@@ -124,14 +123,11 @@ export default function UserDrawer({ userId, onClose }: Props) {
                   ? new Date(data.user.createdAt).toLocaleDateString()
                   : "-"}
               </p>
-
             </div>
 
             <div className="my-6 border-t border-[#c6a75e]/20" />
 
-            {/* ================= SUMMARY CARDS ================= */}
             <div className="grid grid-cols-2 gap-4 mb-8">
-
               <div className="bg-black/40 p-4 rounded-xl border border-[#c6a75e]/20">
                 <p className="text-xs text-gray-400">
                   Total Bookings
@@ -149,16 +145,13 @@ export default function UserDrawer({ userId, onClose }: Props) {
                   ₹ {data.revenue}
                 </p>
               </div>
-
             </div>
 
-            {/* ================= BOOKING HISTORY ================= */}
             <h3 className="text-lg font-semibold mb-4">
               Booking History
             </h3>
 
             <div className="space-y-4">
-
               {data.bookings.length === 0 && (
                 <p className="text-gray-400 text-sm">
                   No bookings found.
@@ -170,8 +163,6 @@ export default function UserDrawer({ userId, onClose }: Props) {
                   key={booking._id}
                   className="bg-black/40 p-4 rounded-xl border border-[#c6a75e]/20"
                 >
-
-                  {/* TOP ROW */}
                   <div className="flex justify-between items-center mb-2">
                     <h4 className="font-medium text-[#c6a75e]">
                       {booking.room?.title ?? "Room"}
@@ -190,13 +181,11 @@ export default function UserDrawer({ userId, onClose }: Props) {
                     </span>
                   </div>
 
-                  {/* PROPERTY */}
                   <p className="text-xs text-gray-400">
                     {booking.room?.property?.name ?? ""} —{" "}
                     {booking.room?.property?.location ?? ""}
                   </p>
 
-                  {/* STAY DATES */}
                   <p className="text-xs text-gray-400 mt-1">
                     Stay:{" "}
                     {booking.checkIn
@@ -208,7 +197,6 @@ export default function UserDrawer({ userId, onClose }: Props) {
                       : "-"}
                   </p>
 
-                  {/* BOOKED DATE */}
                   <p className="text-xs text-gray-400">
                     Booked on:{" "}
                     {booking.createdAt
@@ -216,28 +204,23 @@ export default function UserDrawer({ userId, onClose }: Props) {
                       : "-"}
                   </p>
 
-                  {/* BOTTOM ROW */}
                   <div className="flex justify-between items-center mt-3">
-
                     <p className="font-semibold text-[#c6a75e]">
                       ₹ {booking.totalAmount}
                     </p>
 
                     <a
-                      href={`http://localhost:5000/api/invoice/${booking._id}`}
+                      href={`${BASE_URL}/api/invoice/${booking._id}`}
                       target="_blank"
+                      rel="noopener noreferrer"
                       className="text-xs bg-[#c6a75e] text-black px-3 py-1 rounded hover:opacity-90 transition"
                     >
                       Invoice
                     </a>
-
                   </div>
-
                 </div>
               ))}
-
             </div>
-
           </>
         )}
       </div>

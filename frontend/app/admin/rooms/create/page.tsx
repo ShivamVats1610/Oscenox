@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+// ✅ Production Base URL
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
+
 interface Property {
   _id: string;
   name: string;
@@ -31,11 +34,17 @@ export default function CreateRoomPage() {
   =========================================== */
   useEffect(() => {
     const fetchProperties = async () => {
-      const res = await fetch(
-        "http://localhost:5000/api/properties"
-      );
-      const data = await res.json();
-      setProperties(data);
+      try {
+        const res = await fetch(
+          `${BASE_URL}/api/properties`,
+          { credentials: "include" }
+        );
+
+        const data = await res.json();
+        setProperties(data || []);
+      } catch (error) {
+        console.error("Failed to fetch properties:", error);
+      }
     };
 
     fetchProperties();
@@ -45,13 +54,15 @@ export default function CreateRoomPage() {
      HANDLE CHANGE
   =========================================== */
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   /* ===========================================
-     HANDLE SUBMIT (FormData)
+     HANDLE SUBMIT
   =========================================== */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,27 +78,34 @@ export default function CreateRoomPage() {
       formData.append("pricePerNight", form.pricePerNight);
       formData.append("capacity", form.capacity);
 
-      // Convert amenities to JSON string
       formData.append(
         "amenities",
-        JSON.stringify(form.amenities.split(","))
+        JSON.stringify(
+          form.amenities
+            .split(",")
+            .map((a) => a.trim())
+            .filter(Boolean)
+        )
       );
 
-      // Append images
       if (selectedImages) {
         for (let i = 0; i < selectedImages.length; i++) {
           formData.append("images", selectedImages[i]);
         }
       }
 
-      await fetch(
-        "http://localhost:5000/api/rooms/admin/create",
+      const res = await fetch(
+        `${BASE_URL}/api/rooms/admin/create`,
         {
           method: "POST",
           credentials: "include",
           body: formData,
         }
       );
+
+      if (!res.ok) {
+        throw new Error("Room creation failed");
+      }
 
       router.push("/admin/rooms");
     } catch (error) {
@@ -144,7 +162,6 @@ export default function CreateRoomPage() {
           <textarea
             name="description"
             value={form.description}
-            placeholder="Write description"
             onChange={handleChange}
             rows={4}
             className="w-full bg-black border border-white/20 p-3 rounded"
@@ -158,7 +175,6 @@ export default function CreateRoomPage() {
             type="number"
             name="pricePerNight"
             value={form.pricePerNight}
-            placeholder="(e.g., ₹1000)"
             onChange={handleChange}
             required
             className="w-full bg-black border border-white/20 p-3 rounded"
@@ -173,7 +189,6 @@ export default function CreateRoomPage() {
             name="capacity"
             value={form.capacity}
             onChange={handleChange}
-            placeholder="Number of Guest(e.g., 2)"
             required
             className="w-full bg-black border border-white/20 p-3 rounded"
           />
@@ -203,7 +218,9 @@ export default function CreateRoomPage() {
             type="file"
             multiple
             accept="image/*"
-            onChange={(e) => setSelectedImages(e.target.files)}
+            onChange={(e) =>
+              setSelectedImages(e.target.files)
+            }
             className="w-full bg-black border border-white/20 p-3 rounded"
           />
         </div>

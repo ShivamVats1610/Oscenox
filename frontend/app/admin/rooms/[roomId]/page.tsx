@@ -13,6 +13,9 @@ interface Room {
   images: string[];
 }
 
+// ✅ Production Base URL
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
+
 export default function EditRoomPage() {
   const router = useRouter();
   const params = useParams();
@@ -22,21 +25,23 @@ export default function EditRoomPage() {
   const [selectedImages, setSelectedImages] = useState<FileList | null>(null);
   const [loading, setLoading] = useState(false);
 
-  /* ===========================================
-     FETCH ROOM
-  =========================================== */
+  /* ================= FETCH ROOM ================= */
   useEffect(() => {
     const fetchRoom = async () => {
       try {
         const res = await fetch(
-          `http://localhost:5000/api/rooms/${roomId}`
+          `${BASE_URL}/api/rooms/${roomId}`
         );
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch room");
+        }
 
         const data = await res.json();
 
         setRoom({
           ...data,
-          images: data.images || [], // Ensure images always array
+          images: data.images || [],
           amenities: data.amenities || [],
         });
       } catch (error) {
@@ -47,9 +52,7 @@ export default function EditRoomPage() {
     if (roomId) fetchRoom();
   }, [roomId]);
 
-  /* ===========================================
-     REMOVE EXISTING IMAGE
-  =========================================== */
+  /* ================= REMOVE IMAGE ================= */
   const removeImage = (image: string) => {
     if (!room) return;
 
@@ -60,9 +63,7 @@ export default function EditRoomPage() {
     setRoom({ ...room, images: updatedImages });
   };
 
-  /* ===========================================
-     HANDLE UPDATE
-  =========================================== */
+  /* ================= UPDATE ROOM ================= */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!room) return;
@@ -83,7 +84,6 @@ export default function EditRoomPage() {
         "amenities",
         JSON.stringify(room.amenities)
       );
-
       formData.append(
         "existingImages",
         JSON.stringify(room.images)
@@ -95,14 +95,18 @@ export default function EditRoomPage() {
         }
       }
 
-      await fetch(
-        `http://localhost:5000/api/rooms/admin/${roomId}`,
+      const res = await fetch(
+        `${BASE_URL}/api/rooms/admin/${roomId}`,
         {
           method: "PUT",
           credentials: "include",
           body: formData,
         }
       );
+
+      if (!res.ok) {
+        throw new Error("Update failed");
+      }
 
       router.push("/admin/rooms");
     } catch (error) {
@@ -129,7 +133,6 @@ export default function EditRoomPage() {
         onSubmit={handleSubmit}
         className="max-w-3xl bg-black/40 p-8 rounded-xl border border-[#c6a75e]/30 space-y-6"
       >
-        {/* TITLE */}
         <input
           value={room.title}
           onChange={(e) =>
@@ -138,9 +141,8 @@ export default function EditRoomPage() {
           className="w-full bg-black border border-white/20 p-3 rounded"
         />
 
-        {/* DESCRIPTION */}
         <textarea
-          value={room.description} placeholder="Description"
+          value={room.description}
           onChange={(e) =>
             setRoom({
               ...room,
@@ -150,7 +152,6 @@ export default function EditRoomPage() {
           className="w-full bg-black border border-white/20 p-3 rounded"
         />
 
-        {/* PRICE */}
         <input
           type="number"
           value={room.pricePerNight}
@@ -163,7 +164,6 @@ export default function EditRoomPage() {
           className="w-full bg-black border border-white/20 p-3 rounded"
         />
 
-        {/* CAPACITY */}
         <input
           type="number"
           value={room.capacity}
@@ -185,13 +185,11 @@ export default function EditRoomPage() {
           <div className="grid grid-cols-3 gap-4">
             {room.images && room.images.length > 0 ? (
               room.images.map((img) => (
-                <div
-                  key={img}
-                  className="relative"
-                >
+                <div key={img} className="relative">
                   <img
-                    src={`http://localhost:5000${img}`}
+                    src={`${BASE_URL}${img}`}
                     className="rounded-lg h-32 w-full object-cover"
+                    alt="Room"
                   />
                   <button
                     type="button"
@@ -210,7 +208,6 @@ export default function EditRoomPage() {
           </div>
         </div>
 
-        {/* ADD NEW IMAGES */}
         <div>
           <label className="block mb-2 text-sm">
             Add New Images
@@ -226,7 +223,6 @@ export default function EditRoomPage() {
           />
         </div>
 
-        {/* SUBMIT */}
         <button
           type="submit"
           disabled={loading}

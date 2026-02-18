@@ -9,6 +9,9 @@ interface Props {
   onClose: () => void;
 }
 
+// ✅ Base URL from env
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
+
 export default function BookingModal({ propertyName, onClose }: Props) {
   const { user } = useAuth();
   const router = useRouter();
@@ -69,28 +72,33 @@ export default function BookingModal({ propertyName, onClose }: Props) {
 
     setLoading(true);
 
-    const res = await fetch("http://localhost:5000/api/bookings", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({
-        property: propertyName,
-        roomType,
-        checkIn,
-        checkOut,
-        guests,
-        totalAmount,
-      }),
-    });
+    try {
+      const res = await fetch(`${BASE_URL}/api/bookings`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          property: propertyName,
+          roomType,
+          checkIn,
+          checkOut,
+          guests,
+          totalAmount,
+        }),
+      });
 
-    if (res.ok) {
+      if (!res.ok) {
+        throw new Error("Booking failed");
+      }
+
       onClose();
       router.push("/my-bookings");
-    } else {
-      setError("Booking failed. Please try again.");
-    }
 
-    setLoading(false);
+    } catch (err: any) {
+      setError(err.message || "Booking failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -133,7 +141,6 @@ export default function BookingModal({ propertyName, onClose }: Props) {
             </p>
           )}
 
-          {/* Room Type */}
           <label className="block text-sm mb-1">
             Select Room Type
           </label>
@@ -147,7 +154,6 @@ export default function BookingModal({ propertyName, onClose }: Props) {
             <option>Premium</option>
           </select>
 
-          {/* Dates */}
           <label className="block text-sm mb-1">
             Check-in Date
           </label>
@@ -171,7 +177,6 @@ export default function BookingModal({ propertyName, onClose }: Props) {
             className="w-full mb-4 px-4 py-3 bg-black/40 border border-[#c6a75e]/30 rounded-lg"
           />
 
-          {/* Guests */}
           <label className="block text-sm mb-1">
             Number of Guests
           </label>
@@ -184,7 +189,6 @@ export default function BookingModal({ propertyName, onClose }: Props) {
             className="w-full mb-4 px-4 py-3 bg-black/40 border border-[#c6a75e]/30 rounded-lg"
           />
 
-          {/* Total */}
           <div className="text-[#c6a75e] font-semibold mb-6 text-center">
             Total Stay Price: ₹ {totalAmount}
           </div>
@@ -199,7 +203,6 @@ export default function BookingModal({ propertyName, onClose }: Props) {
         </div>
       </div>
 
-      {/* Animation */}
       <style jsx>{`
         .animate-flipIn {
           animation: flipIn 0.5s ease-out;

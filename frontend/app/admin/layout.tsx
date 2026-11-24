@@ -30,7 +30,7 @@ export default function AdminLayout({
         <div className=" p-6 border-b border-white/10 flex justify-center">
           <Image
             src="/images/white.png"   // <-- put your logo inside public folder
-            alt="OSCENOX Logo"
+            alt="BluCoreIndia Logo"
             width={120}
             height={120}
           />
@@ -61,7 +61,7 @@ export default function AdminLayout({
 
         {/* FOOTER */}
         <div className="p-6 border-t border-white/10 text-xs text-white/40">
-          © 2026 OSCENOX CRM
+          © 2026 BluCoreIndia CRM
         </div>
       </aside>
 

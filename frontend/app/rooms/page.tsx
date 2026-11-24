@@ -81,7 +81,7 @@ export default function RoomsPage() {
             <div className="absolute inset-0 bg-black/50" />
 
             <h1 className="relative z-10 text-4xl md:text-6xl font-serif text-white text-center">
-              Welcome to Rooms by Oscenox
+              Welcome to Rooms by BluCoreIndia
             </h1>
           </div>
 

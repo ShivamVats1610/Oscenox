@@ -121,7 +121,7 @@ export default function RoomDetailsPage({
                   </h1>
 
                   <p className="text-gray-200 mb-4">
-                    Experience premium comfort and unforgettable stays at Oscenox.
+                    Experience premium comfort and unforgettable stays at BluCoreIndia.
                   </p>
 
                   <div className="flex items-center gap-4">

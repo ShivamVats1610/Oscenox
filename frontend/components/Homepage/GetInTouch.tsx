@@ -19,7 +19,7 @@ export default function GetInTouch() {
           {/* Heading */}
           <div className="text-center mb-14">
             <h2 className="text-4xl md:text-5xl font-serif text-black">
-              Get in Touch with Oscenox
+              Get in Touch with BluCoreIndia
             </h2>
             <div className="w-24 h-0.5 bg-[#007877] mx-auto mt-6" />
             <p className="mt-6 text-black text-lg max-w-3xl mx-auto">
@@ -66,7 +66,7 @@ export default function GetInTouch() {
             <div className="relative">
               <img
                 src="/images/contact.png"
-                alt="Contact Oscenox"
+                alt="Contact BluCoreIndia"
                 className="rounded-3xl shadow-xl object-cover w-full h-105"
               />
             </div>

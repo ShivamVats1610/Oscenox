@@ -44,7 +44,7 @@ export default function Home() {
 
                   <h4 className="font-semibold text-black">{name}</h4>
                   <p className="mt-1 text-sm text-gray-600">
-                    Luxury stay experience by Oscenox
+                    Luxury stay experience by BluCoreIndia
                   </p>
                 </div>
               )
@@ -56,7 +56,7 @@ export default function Home() {
       {/* CTA SECTION */}
       <section className="bg-[#007877] py-20 text-center text-white">
         <h2 className="text-3xl font-bold">
-          Ready to Stay with Oscenox?
+          Ready to Stay with BluCoreIndia?
         </h2>
         <p className="mt-4 text-white/90">
           Book your premium stay with smart hospitality.

@@ -22,7 +22,7 @@ export default function AboutSection() {
           <div>
             {/* Bigger ABOUT title */}
             <p className="uppercase tracking-[0.05em] text-3xl text-[#007877] font-bold">
-              About Oscenox
+              About BluCoreIndia
             </p>
 
             <h2 className="mt-6 text-5xl md:text-6xl font-serif text-black leading-tight">
@@ -30,7 +30,7 @@ export default function AboutSection() {
             </h2>
 
             <p className="mt-8 text-gray-800 leading-relaxed text-lg">
-              Oscenox is dedicated to crafting unique and luxurious hospitality
+              BluCoreIndia is dedicated to crafting unique and luxurious hospitality
               experiences. With meticulous attention to detail, we transform
               ordinary spaces into extraordinary destinations.
             </p>
@@ -54,7 +54,7 @@ export default function AboutSection() {
           <div className="grid grid-cols-2 gap-6">
             <img
               src="/images/about-2.webp"
-              alt="Oscenox Property"
+              alt="BluCoreIndia Property"
               className="rounded-3xl object-cover h-52 w-full shadow-lg"
             />
             <img

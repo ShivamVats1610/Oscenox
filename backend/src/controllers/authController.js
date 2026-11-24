@@ -10,10 +10,17 @@ const cookieOptions = {
 };
 
 const firebaseLookup = async (idToken) => {
+  if (!process.env.FIREBASE_API_KEY) {
+    throw new Error("Render is missing FIREBASE_API_KEY");
+  }
+
   const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${process.env.FIREBASE_API_KEY}`, {
     method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idToken }),
   });
-  if (!response.ok) throw new Error("Invalid Firebase token");
+  if (!response.ok) {
+    const body = await response.json().catch(() => null);
+    throw new Error(body?.error?.message || "Firebase token verification failed");
+  }
   return (await response.json()).users?.[0];
 };
 
@@ -60,7 +67,8 @@ exports.firebaseSession = async (req, res) => {
       .json({ success: true, user: { _id: user._id, name: user.name, email: user.email, role: user.role, profileImage: user.profileImage || null } });
   } catch (error) {
     console.error("Firebase session error:", error.message);
-    res.status(401).json({ message: "Firebase authentication failed" });
+    const status = error.message.includes("Render is missing") ? 500 : 401;
+    res.status(status).json({ message: error.message });
   }
 };
 

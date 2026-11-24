@@ -102,7 +102,7 @@ router.post(
       } = req.body;
 
       const imagePaths = req.files
-        ? await Promise.all(req.files.map((file) => uploadImage(file.buffer, "oscenox/rooms")))
+        ? await Promise.all(req.files.map((file) => uploadImage(file.buffer, "blucoreindia/rooms")))
         : [];
 
       const newRoom = await Room.create({
@@ -152,7 +152,7 @@ router.put(
 
       if (req.files && req.files.length > 0) {
         const newImages = await Promise.all(
-          req.files.map((file) => uploadImage(file.buffer, "oscenox/rooms"))
+          req.files.map((file) => uploadImage(file.buffer, "blucoreindia/rooms"))
         );
         updatedImages = [...updatedImages, ...newImages];
       }

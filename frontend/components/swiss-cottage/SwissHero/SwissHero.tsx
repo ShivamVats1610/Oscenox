@@ -10,7 +10,7 @@ export default function SwissHero() {
       {/* Content */}
       <div className="swiss-hero-inner">
         <p className="swiss-brand">
-          Swiss Cottage <span>by Oscenox</span>
+          Swiss Cottage <span>by BluCoreIndia</span>
         </p>
 
         <h1 className="swiss-title">

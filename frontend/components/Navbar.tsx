@@ -46,7 +46,7 @@ export default function Navbar() {
           >
             <img
               src="/images/logo.png"
-              alt="Oscenox"
+              alt="BluCoreIndia"
               className="h-12 sm:h-14 md:h-20 w-auto object-contain"
             />
           </Link>
@@ -140,7 +140,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between px-5 py-4 border-b">
           <img
             src="/images/logo.png"
-            alt="Oscenox"
+            alt="BluCoreIndia"
             className="h-12 w-auto object-contain"
           />
           <button

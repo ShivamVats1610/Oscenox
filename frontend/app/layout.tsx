@@ -3,7 +3,7 @@ import { AuthProvider } from "./context/AuthContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "OSCENOX",
+  title: "BluCoreIndia",
   description: "Luxury Hospitality Experience",
 };
 

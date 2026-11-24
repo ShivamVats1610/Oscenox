@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 112" role="img" aria-labelledby="title desc">
+  <title id="title">BluCoreIndia</title><desc id="desc">BluCoreIndia hospitality logo</desc>
+  <defs><linearGradient id="gold" x1="0" x2="1"><stop stop-color="#e7cc80"/><stop offset="1" stop-color="#a77a27"/></linearGradient></defs>
+  <path fill="url(#gold)" d="M55 7c23 14 35 34 35 52S78 97 55 106C32 97 20 77 20 59S32 21 55 7Zm0 16C41 34 35 46 35 59s6 26 20 34c14-8 20-21 20-34S69 34 55 23Z"/>
+  <path fill="#e7cc80" d="M55 31c13 11 18 21 18 30S68 80 55 89C42 80 37 70 37 61s5-19 18-30Zm0 15c-5 5-7 10-7 15s2 10 7 15c5-5 7-10 7-15s-2-10-7-15Z"/>
+  <text x="108" y="69" fill="#f3e8c8" font-family="Georgia,serif" font-size="50" font-weight="700" letter-spacing="1">BluCore</text>
+  <text x="357" y="69" fill="url(#gold)" font-family="Georgia,serif" font-size="50" font-weight="700" letter-spacing="1">India</text>
+  <text x="111" y="91" fill="#d5c29a" font-family="Arial,sans-serif" font-size="12" letter-spacing="5">HOSPITALITY COLLECTION</text>
+</svg>

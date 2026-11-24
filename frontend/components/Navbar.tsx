@@ -45,7 +45,7 @@ export default function Navbar() {
             className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex items-center"
           >
             <img
-              src="/images/logo.png"
+              src="/brand/blucoreindia-logo.png"
               alt="BluCoreIndia"
               className="h-12 sm:h-14 md:h-20 w-auto object-contain"
             />
@@ -139,7 +139,7 @@ export default function Navbar() {
         {/* SIDEBAR HEADER */}
         <div className="flex items-center justify-between px-5 py-4 border-b">
           <img
-            src="/images/logo.png"
+            src="/brand/blucoreindia-logo.png"
             alt="BluCoreIndia"
             className="h-12 w-auto object-contain"
           />

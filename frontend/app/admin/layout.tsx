@@ -29,10 +29,11 @@ export default function AdminLayout({
         {/* LOGO */}
         <div className=" p-6 border-b border-white/10 flex justify-center">
           <Image
-            src="/images/white.png"   // <-- put your logo inside public folder
+            src="/brand/blucoreindia-logo.png"
             alt="BluCoreIndia Logo"
-            width={120}
-            height={120}
+            width={240}
+            height={80}
+            className="h-auto w-48 rounded-md bg-white p-2"
           />
           
         </div>

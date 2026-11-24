@@ -7,6 +7,8 @@ import {
   useState,
   ReactNode,
 } from "react";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { firebaseAuth } from "@/lib/firebase";
 
 interface User {
   _id: string;
@@ -64,6 +66,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   =========================================== */
   useEffect(() => {
     fetchUser();
+    return onAuthStateChanged(firebaseAuth, (firebaseUser) => {
+      if (!firebaseUser) setUser(null);
+    });
   }, []);
 
   /* ===========================================
@@ -88,6 +93,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.error("Logout error:", error);
     }
+
+    await signOut(firebaseAuth);
 
     setUser(null);
   };

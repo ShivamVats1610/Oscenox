@@ -27,7 +27,7 @@ export default function ProfilePage() {
         <img
           src={
             user.profileImage
-              ? `${BASE_URL}${user.profileImage}`
+              ? (user.profileImage.startsWith("http") ? user.profileImage : `${BASE_URL}${user.profileImage}`)
               : "/images/default-avatar.png"
           }
           alt="Profile"

@@ -61,7 +61,7 @@ export default function RoomGallery({ images }: Props) {
           onClick={() => setFullscreen(true)}
         >
           <img
-            src={`${BASE_URL}${images[active] ?? images[0]}`}
+            src={(images[active] ?? images[0])?.startsWith("http") ? (images[active] ?? images[0]) : `${BASE_URL}${images[active] ?? images[0]}`}
             alt="Room Image"
             className="w-full h-112.5 object-cover transition duration-700"
           />
@@ -124,7 +124,7 @@ export default function RoomGallery({ images }: Props) {
 
           <div className="relative max-w-6xl w-full px-8">
             <img
-              src={`${BASE_URL}${images[active] ?? images[0]}`}
+              src={(images[active] ?? images[0])?.startsWith("http") ? (images[active] ?? images[0]) : `${BASE_URL}${images[active] ?? images[0]}`}
               alt="Fullscreen Room"
               className="w-full max-h-[80vh] object-contain rounded-xl"
             />

@@ -105,7 +105,7 @@ export default function RoomsPage() {
                     {/* Room Image */}
                     <div className="md:w-1/3 h-64 md:h-auto">
                       <img
-                        src={`${BASE_URL}${room.images[0]}`}
+                        src={room.images[0]?.startsWith("http") ? room.images[0] : `${BASE_URL}${room.images[0]}`}
                         className="w-full h-full object-cover"
                         alt={room.title}
                       />

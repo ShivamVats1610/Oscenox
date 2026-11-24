@@ -4,6 +4,7 @@ const Property = require("../models/Property");
 const protect = require("../middleware/authMiddleware");
 const allowRoles = require("../middleware/roleMiddleware");
 const upload = require("../middleware/uploadRoomImages");
+const { uploadImage } = require("../config/cloudinary");
 
 const router = express.Router();
 
@@ -101,9 +102,7 @@ router.post(
       } = req.body;
 
       const imagePaths = req.files
-        ? req.files.map(
-            (file) => `/uploads/rooms/${file.filename}`
-          )
+        ? await Promise.all(req.files.map((file) => uploadImage(file.buffer, "oscenox/rooms")))
         : [];
 
       const newRoom = await Room.create({
@@ -152,8 +151,8 @@ router.put(
         : [];
 
       if (req.files && req.files.length > 0) {
-        const newImages = req.files.map(
-          (file) => `/uploads/rooms/${file.filename}`
+        const newImages = await Promise.all(
+          req.files.map((file) => uploadImage(file.buffer, "oscenox/rooms"))
         );
         updatedImages = [...updatedImages, ...newImages];
       }

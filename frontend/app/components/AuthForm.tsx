@@ -7,6 +7,9 @@ import {
 } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { firebaseAuth } from "@/lib/firebase";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 type AuthType = "login" | "signup";
 
@@ -37,6 +40,7 @@ export default function AuthForm({ type }: AuthFormProps) {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setForm({
@@ -51,15 +55,21 @@ export default function AuthForm({ type }: AuthFormProps) {
     setError("");
 
     try {
+      const credential = isSignup
+        ? await createUserWithEmailAndPassword(firebaseAuth, form.email, form.password)
+        : await signInWithEmailAndPassword(firebaseAuth, form.email, form.password);
+
+      if (isSignup && form.name) await updateProfile(credential.user, { displayName: form.name });
+      const idToken = await credential.user.getIdToken();
       const res = await fetch(
-        `${BASE_URL}/api/auth/${isSignup ? "signup" : "login"}`,
+        `${BASE_URL}/api/auth/firebase-session`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           credentials: "include",
-          body: JSON.stringify(form),
+          body: JSON.stringify({ idToken, name: form.name }),
         }
       );
 
@@ -126,14 +136,20 @@ export default function AuthForm({ type }: AuthFormProps) {
               className="w-full px-4 py-3 bg-black/40 border border-[#c6a75e]/30 rounded-lg text-white focus:outline-none focus:border-[#c6a75e]"
             />
 
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              required
-              onChange={handleChange}
-              className="w-full px-4 py-3 bg-black/40 border border-[#c6a75e]/30 rounded-lg text-white focus:outline-none focus:border-[#c6a75e]"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                minLength={6}
+                required
+                onChange={handleChange}
+                className="w-full px-4 py-3 pr-12 bg-black/40 border border-[#c6a75e]/30 rounded-lg text-white focus:outline-none focus:border-[#c6a75e]"
+              />
+              <button type="button" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? "Hide password" : "Show password"} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#c6a75e]">
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
 
             <button
               type="submit"

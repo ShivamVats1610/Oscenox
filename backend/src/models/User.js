@@ -14,13 +14,13 @@ const userSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: false,
+      required: true,
       unique: true,
       lowercase: true,
     },
     password: {
       type: String,
-      required: true,
+      required: false,
       minlength: 6,
     },
     isBlocked: {

@@ -24,7 +24,26 @@ interface FormState {
 }
 
 // ✅ Base URL from env
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+const firebaseErrorMessage = (error: unknown) => {
+  const code = typeof error === "object" && error && "code" in error
+    ? String(error.code)
+    : "";
+  const messages: Record<string, string> = {
+    "auth/email-already-in-use": "An account already exists for this email. Please log in instead.",
+    "auth/invalid-email": "Enter a valid email address.",
+    "auth/weak-password": "Use a password with at least 6 characters.",
+    "auth/invalid-credential": "Incorrect email or password.",
+    "auth/user-not-found": "Incorrect email or password.",
+    "auth/wrong-password": "Incorrect email or password.",
+    "auth/operation-not-allowed": "Email/password sign-in is not enabled in Firebase.",
+    "auth/api-key-not-valid.-please-pass-a-valid-api-key.": "Firebase is not configured correctly. Please contact support.",
+    "auth/network-request-failed": "Network error. Check your connection and try again.",
+  };
+
+  return messages[code] || (error instanceof Error ? error.message : "Authentication failed. Please try again.");
+};
 
 export default function AuthForm({ type }: AuthFormProps) {
   const router = useRouter();
@@ -55,6 +74,10 @@ export default function AuthForm({ type }: AuthFormProps) {
     setError("");
 
     try {
+      if (!BASE_URL) {
+        throw new Error("The application API URL is not configured. Please contact support.");
+      }
+
       const credential = isSignup
         ? await createUserWithEmailAndPassword(firebaseAuth, form.email, form.password)
         : await signInWithEmailAndPassword(firebaseAuth, form.email, form.password);
@@ -83,8 +106,8 @@ export default function AuthForm({ type }: AuthFormProps) {
 
       router.replace("/");
 
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(firebaseErrorMessage(err));
     } finally {
       setLoading(false);
     }

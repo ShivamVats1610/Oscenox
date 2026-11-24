@@ -11,5 +11,15 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
+const requiredFirebaseConfig = ["apiKey", "authDomain", "projectId", "appId"] as const;
+const missingFirebaseConfig = requiredFirebaseConfig.filter((key) => !firebaseConfig[key]);
+
+if (missingFirebaseConfig.length > 0) {
+  throw new Error(
+    `Firebase configuration is missing: ${missingFirebaseConfig.join(", ")}. ` +
+      "Set the NEXT_PUBLIC_FIREBASE_* variables and redeploy the frontend."
+  );
+}
+
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 export const firebaseAuth = getAuth(app);

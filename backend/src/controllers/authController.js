@@ -2,6 +2,13 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const cookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+};
+
 const firebaseLookup = async (idToken) => {
   const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${process.env.FIREBASE_API_KEY}`, {
     method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idToken }),
@@ -29,11 +36,7 @@ const generateToken = (user) => {
 =========================================== */
 exports.logout = (req, res) => {
   res
-    .cookie("token", "", {
-      httpOnly: true,
-      expires: new Date(0),
-      sameSite: "lax",
-    })
+    .cookie("token", "", { ...cookieOptions, expires: new Date(0) })
     .json({
       success: true,
       message: "Logged out successfully",
@@ -53,7 +56,7 @@ exports.firebaseSession = async (req, res) => {
     if (user.isBlocked || user.isDeleted) return res.status(403).json({ message: "This account is unavailable" });
 
     const token = generateToken(user);
-    res.cookie("token", token, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", maxAge: 7 * 24 * 60 * 60 * 1000 })
+    res.cookie("token", token, cookieOptions)
       .json({ success: true, user: { _id: user._id, name: user.name, email: user.email, role: user.role, profileImage: user.profileImage || null } });
   } catch (error) {
     console.error("Firebase session error:", error.message);
@@ -93,12 +96,7 @@ exports.signup = async (req, res) => {
     const token = generateToken(user);
 
     res
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: false, // true in production
-        sameSite: "lax",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      })
+      .cookie("token", token, cookieOptions)
       .status(201)
       .json({
         success: true,
@@ -152,12 +150,7 @@ exports.login = async (req, res) => {
     const token = generateToken(user);
 
     res
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: false,
-        sameSite: "lax",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      })
+      .cookie("token", token, cookieOptions)
       .json({
         success: true,
         user: {
